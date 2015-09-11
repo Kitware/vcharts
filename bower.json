@@ -1,11 +1,9 @@
 {
   "name": "vcharts",
-  "version": "0.1.0",
   "authors": [
     "Jeffrey Baumes <jeff.baumes@kitware.com>"
   ],
   "description": "Resusable Vega Charts",
-  "main": "js/vcharts.js",
   "moduleType": [
     "globals"
   ],
@@ -23,5 +21,8 @@
     "bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "dependencies": {
+    "vega": "~2.2.4"
+  }
 }
