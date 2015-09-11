@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>XY</title>
+    <title>XY Scaling</title>
     <script src="../bower_components/d3/d3.js"></script>
     <script src="../bower_components/vega/vega.js"></script>
     <script src="../vcharts.js"></script>
@@ -11,9 +11,9 @@
 <script type="text/javascript">
 var s1 = [], s2 = [];
 var i;
-for (i = 0; i < 100000; i += 1) {
+for (i = 0; i < 10000; i += 1) {
     s1.push([Math.random(), Math.random()]);
-    s2.push([Math.random(), Math.random()]);
+    s2.push([Math.random() + 0.5, Math.random() + 0.5]);
 }
 vcharts.xy({
     el: '#vis',
@@ -23,8 +23,18 @@ vcharts.xy({
             values: s1,
             x: 'datum[0]',
             y: 'datum[1]',
-            color: 'cyan',
-            // shape: 'square',
+            color: 'steelblue',
+            pointSize: 10,
+            strokeWidth: 0,
+            line: false,
+            point: true
+        },
+        {
+            name: 'series2',
+            values: s2,
+            x: 'datum[0]',
+            y: 'datum[1]',
+            color: 'orange',
             pointSize: 10,
             strokeWidth: 0,
             line: false,
@@ -33,10 +43,10 @@ vcharts.xy({
     ],
     axes: {
         x: {
-            range: [0, 1]
+            range: [0, 1.5]
         },
         y: {
-            range: [0, 1]
+            range: [0, 1.5]
         }
     }
 });
