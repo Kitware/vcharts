@@ -119,6 +119,8 @@ vcharts.xy({
             title: Axis title (string)
             type: Mode for axis scale, either "linear" (default) or "time"
             range: Two-element array of the form [min, max]
+            pan: Allow panning this axis with mouse drags (default true)
+            zoom: Allow zooming this axis with mouse wheel (default true)
         },
         y: {
             ...
