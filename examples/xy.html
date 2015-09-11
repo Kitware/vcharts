@@ -1,0 +1,44 @@
+<html>
+<head>
+    <title>XY</title>
+    <script src="../bower_components/d3/d3.js"></script>
+    <script src="../bower_components/vega/vega.js"></script>
+    <script src="../dist/vcharts.js"></script>
+</head>
+<body>
+    <div id="vis"></div>
+</body>
+<script type="text/javascript">
+var s1 = [], s2 = [];
+var i;
+for (i = 0; i < 100000; i += 1) {
+    s1.push([Math.random(), Math.random()]);
+    s2.push([Math.random(), Math.random()]);
+}
+vcharts.xy({
+    el: '#vis',
+    series: [
+        {
+            name: 'series1',
+            values: s1,
+            x: 'datum[0]',
+            y: 'datum[1]',
+            color: 'cyan',
+            // shape: 'square',
+            pointSize: 10,
+            strokeWidth: 0,
+            line: false,
+            point: true
+        }
+    ],
+    axes: {
+        x: {
+            range: [0, 1]
+        },
+        y: {
+            range: [0, 1]
+        }
+    }
+});
+</script>
+</html>

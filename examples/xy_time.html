@@ -1,0 +1,65 @@
+<html>
+<head>
+    <title>XY Time</title>
+    <script src="../bower_components/d3/d3.js"></script>
+    <script src="../bower_components/vega/vega.js"></script>
+    <script src="../dist/vcharts.js"></script>
+</head>
+<body>
+    <div id="vis"></div>
+</body>
+<script type="text/javascript">
+var s1 = [], s2 = [], i, dates, format = d3.time.format("%Y-%m-%d");
+
+Date.prototype.addDays = function(days)
+{
+    var dat = new Date(this.valueOf());
+    dat.setDate(dat.getDate() + days);
+    return dat;
+}
+
+var now = new Date();
+
+dates = d3.time.days(now, now.addDays(1000));
+for (i = 0; i < dates.length; i += 1) {
+    s1.push([dates[i].valueOf(), Math.random()]);
+    s2.push([dates[i].valueOf(), Math.random() + 2]);
+}
+vcharts.xy({
+    el: '#vis',
+    series: [
+        {
+            name: 'series1',
+            values: s1,
+            x: 'datum[0]',
+            y: 'datum[1]',
+            color: 'blue',
+            line: false,
+            point: true
+        },
+        {
+            name: 'series2',
+            values: s2,
+            x: 'datum[0]',
+            y: 'datum[1]',
+            color: 'green',
+            line: true,
+            point: false
+        }
+    ],
+    axes: {
+        x: {
+            title: 'Time',
+            type: 'time',
+            range: [now.valueOf(), now.addDays(1000).valueOf()]
+        },
+        y: {
+            title: 'Value',
+            zoom: false,
+            pan: false,
+            range: [-1, 4]
+        }
+    }
+});
+</script>
+</html>
