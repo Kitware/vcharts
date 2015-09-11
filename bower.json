@@ -4,6 +4,7 @@
     "Jeffrey Baumes <jeff.baumes@kitware.com>"
   ],
   "description": "Resusable Vega Charts",
+  "main": "vcharts.js",
   "moduleType": [
     "globals"
   ],
