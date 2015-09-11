@@ -97,6 +97,8 @@ vcharts.vega({
 
 ### XY Plot
 
+Plots (x,y) coordinate pairs as points and/or lines.
+
 ```
 vcharts.xy({
     ...
