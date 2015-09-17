@@ -379,7 +379,7 @@ vcharts.xy = vcharts.vegaModule({
                         "update": {
                             "x": { "scale": "x", "signal": "tooltip.x" },
                             "y": { "scale": "y", "signal": "tooltip.y", "offset": -5 },
-                            "text": { "template": "({{tooltip.x|number:'4g'}}, {{tooltip.y|number:'4g'}})" },
+                            "text": { "template": "({{tooltip.x|number:'.4g'}}, {{tooltip.y|number:'.4g'}})" },
                             "fillOpacity": {
                                 "rule": [
                                     {

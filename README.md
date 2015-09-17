@@ -1,4 +1,5 @@
 # vcharts
+
 Reusable [Vega](http://vega.github.io/vega/) charts.
 
 ## Getting Started
@@ -106,9 +107,12 @@ vcharts.xy({
         {
             name: Name of the series to show in legend
             values: Array of items in the series
-            x: Accessor for x values as a string, where current item is datum (e.g. 'datum.x', 'datum[0]')
-            y: Accessor for y values as a string, where current item is datum (e.g. 'datum.y', 'datum[1]')
-            color: Color as any CSS-compatible color string representation (e.g. 'blue', '#ffffff')
+            x: Accessor for x values as a string, where current item is
+                datum (e.g. 'datum.x', 'datum[0]')
+            y: Accessor for y values as a string, where current item is
+                datum (e.g. 'datum.y', 'datum[1]')
+            color: Color as any CSS-compatible color string representation
+                (e.g. 'blue', '#ffffff')
             line: Connect the series with a line (default true)
             point: Render points (default false)
             pointSize: Size of points in square pixels
@@ -131,3 +135,49 @@ vcharts.xy({
 })
 ```
 
+### Bullet Chart
+
+Based on the [description by Perceptual Edge](http://www.perceptualedge.com/articles/misc/Bullet_Graph_Design_Spec.pdf).
+
+```
+vcharts.bullet({
+    ...
+    value: Value to display as a bar
+    title: Title to display to the left (optional)
+    subtitle: Subtitle to display under the title (optional)
+    markers: [
+        {
+            value: Value to display as a vertical line,
+                normally a comparison value
+        }
+        ...
+    ],
+    ranges: [
+        {
+            min: Minimum range value
+            max: Maximum range value
+            background: Background color for the range
+            foreground: Color of value and markers that fall in this range,
+                (default "black").
+        }
+        ...
+    ]
+});
+```
+
+Example
+
+```js
+vcharts.bullet({
+    el: '#vis',
+    value: 0.8,
+    title: 'Error',
+    subtitle: '% deviation from ground truth',
+    markers: [{value: 0.05}],
+    ranges: [
+        {min: 0, max: 0.1, background: '#eeeeee'},
+        {min: 0.1, max: 0.75, background: '#aaaaaa'},
+        {min: 0.75, max: 1, background: '#888888'}
+    ]
+});
+```

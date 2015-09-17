@@ -19,7 +19,15 @@ vcharts._setNested = function (spec, parts, value) {
 }
 
 vcharts.transform = function (spec, options) {
-    var transformed, index, templateSpec, elements, element, elementIndex, arg1, arg2;
+    var transformed,
+        index,
+        templateSpec,
+        elements,
+        element,
+        elementIndex,
+        itemIndex,
+        arg1, arg2;
+
     if (Array.isArray(spec)) {
         transformed = [];
         for (index = 0; index < spec.length; index += 1) {
@@ -43,7 +51,6 @@ vcharts.transform = function (spec, options) {
             if (transformed === undefined) {
                 transformed = templateSpec[1];
                 vcharts._setNested(options, templateSpec[0].split('.'), templateSpec[1]);
-                options[templateSpec[0]] = templateSpec[1];
             }
             return transformed;
         }
@@ -53,9 +60,11 @@ vcharts.transform = function (spec, options) {
             elements = vcharts.transform(templateSpec[0], options);
             for (elementIndex = 0; elementIndex < elements.length; elementIndex += 1) {
                 options[templateSpec[1]] = elements[elementIndex];
-                element = vcharts.transform(templateSpec[2], options);
-                if (element !== null) {
-                    transformed.push(element);
+                for (itemIndex = 2; itemIndex < templateSpec.length; itemIndex += 1) {
+                    element = vcharts.transform(templateSpec[itemIndex], options);
+                    if (element !== null) {
+                        transformed.push(element);
+                    }
                 }
             }
             return transformed;
