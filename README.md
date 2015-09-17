@@ -15,16 +15,17 @@ Setup a scaffold `index.html` with the following contents:
 ```html
 <html>
 <head>
+    <meta charset="UTF-8">
     <script src="bower_components/d3/d3.min.js"></script>
     <script src="bower_components/vega/vega.min.js"></script>
-    <script src="bower_componenets/vcharts/vcharts.min.js"></script>
+    <script src="bower_components/vcharts/vcharts.min.js"></script>
 </head>
 <body>
     <div id="vis"></div>
-</body>
 <script>
 // Your script here
 </script>
+</body>
 ```
 
 Plot your chart in the `script` section:
