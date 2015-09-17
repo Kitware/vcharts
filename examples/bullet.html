@@ -21,10 +21,9 @@ var colors = d3.scale.category10(),
 
 vcharts.bullet({
     el: '#vis1',
-    height: 20,
     value: 0.8,
     title: 'Error',
-    subtitle: '% deviation from ground truth',
+    subtitle: '% dev from ground truth',
     markers: [{value: 0.05}],
     ranges: [
         {min: 0, max: 0.1, background: gray(90)},
@@ -35,10 +34,9 @@ vcharts.bullet({
 
 vcharts.bullet({
     el: '#vis2',
-    height: 20,
     value: 0.2,
     title: 'Error',
-    subtitle: '% deviation from ground truth',
+    subtitle: '% dev from ground truth',
     markers: [{value: 0.05}],
     ranges: [
         {min: 0, max: 0.1, background: gray(90), foreground: stoplight.green},
@@ -49,7 +47,6 @@ vcharts.bullet({
 
 vcharts.bullet({
     el: '#vis3',
-    height: 20,
     value: -0.8,
     markers: [{value: -0.05}],
     ranges: [
@@ -58,5 +55,23 @@ vcharts.bullet({
         {max: 0, min: -0.1, background: gray(90), foreground: stoplight.green}
     ]
 });
+
+vcharts.bullet({
+    el: '#vis3',
+    height: 20,
+    width: 200,
+    value: -0.8,
+    axisFontSize: 9,
+    labelFontSize: 9,
+    titleFontSize: 16,
+    title: "Title",
+    markers: [{value: -0.05}],
+    ranges: [
+        {max: -0.75, min: -1, background: gray(60), foreground: stoplight.red},
+        {max: -0.1, min: -0.75, background: gray(75), foreground: stoplight.yellow},
+        {max: 0, min: -0.1, background: gray(90), foreground: stoplight.green}
+    ]
+});
+
 </script>
 </html>

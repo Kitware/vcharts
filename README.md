@@ -143,8 +143,12 @@ Based on the [description by Perceptual Edge](http://www.perceptualedge.com/arti
 vcharts.bullet({
     ...
     value: Value to display as a bar
-    title: Title to display to the left (optional)
-    subtitle: Subtitle to display under the title (optional)
+    title: Title to display to the left
+    subtitle: Subtitle to display under the title
+    axisFontSize: Font size for axis labels
+    labelFontSize: Font size for value label
+    titleFontSize: Font size for title
+    labelFontSize: Font size for subtitle
     markers: [
         {
             value: Value to display as a vertical line,

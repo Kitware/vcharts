@@ -110,7 +110,7 @@ vcharts.vegaModule = function (specTemplate) {
 
 vcharts.bullet = vcharts.vegaModule({
     "width": {"{{": ["width", 300]},
-    "height": {"{{": ["height", 20]},
+    "height": {"{{": ["height", 40]},
     "padding": {
         "top": 10,
         "left": {
@@ -150,7 +150,7 @@ vcharts.bullet = vcharts.vegaModule({
                 {
                     "type": "formula",
                     "field": "dx",
-                    "expr": "if(datum.value < 0, 3, -3)"
+                    "expr": "if(datum.value < 0, 5, -5)"
                 }
             ]
         },
@@ -197,6 +197,7 @@ vcharts.bullet = vcharts.vegaModule({
         {
             "type": "x",
             "scale": "x",
+            "ticks": 5,
             "properties": {
                 "axis": {
                     "stroke": {"value": "hsl(0,0%,75%)"},
@@ -207,7 +208,7 @@ vcharts.bullet = vcharts.vegaModule({
                     "strokeWidth": {"value": 0.5}
                 },
                 "labels": {
-                    "fontSize": {"value": 9}
+                    "fontSize": {"value": {"{{": ["axisFontSize", 14]}}
                 }
             }
         }
@@ -258,10 +259,11 @@ vcharts.bullet = vcharts.vegaModule({
             "properties": {
                 "enter": {
                     "x": {"value": -10},
-                    "y": {"scale": "y", "value": 1, "offset": -5},
-                    "fontSize": {"value": 16},
+                    "y": {"scale": "y", "value": 0.5},
+                    "fontSize": {"value": {"{{": ["titleFontSize", 20]}},
                     "text": {"value": {"{{": ["title", ""]}},
                     "align": {"value": "right"},
+                    "baseline": {"value": "middle"},
                     "fill": {"value": "black"}
                 }
             }
@@ -271,10 +273,11 @@ vcharts.bullet = vcharts.vegaModule({
             "properties": {
                 "enter": {
                     "x": {"value": -10},
-                    "y": {"scale": "y", "value": 1, "offset": 10},
-                    "fontSize": {"value": 10},
+                    "y": {"scale": "y", "value": 0.5, "offset": 15},
+                    "fontSize": {"value": {"{{": ["subtitleFontSize", 12]}},
                     "text": {"value": {"{{": ["subtitle", ""]}},
                     "align": {"value": "right"},
+                    "baseline": {"value": "middle"},
                     "fill": {"value": "black"}
                 }
             }
@@ -287,7 +290,7 @@ vcharts.bullet = vcharts.vegaModule({
                     "x": {"scale": "x", "field": "value"},
                     "dx": {"field": "dx"},
                     "y": {"scale": "y", "value": 0.5},
-                    "fontSize": {"value": 8},
+                    "fontSize": {"value": {"{{": ["labelFontSize", 16]}},
                     "text": {"template": {
                         "{{": ["display", "{{datum.value|number:'.2g'}}"]
                     }},
