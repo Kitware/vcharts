@@ -24,6 +24,6 @@
     "tests"
   ],
   "dependencies": {
-    "vega": "~2.2.4"
+    "vega": "~2.2.5"
   }
 }
