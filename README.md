@@ -188,6 +188,10 @@ The following additional options are supported:
 | subtitle  | String | Subtitle to display below the title. |
 | markers   | Array  | Comparative markers to display with the form {value: *Number*}, displayed as a vertical line. |
 | ranges    | Array of [Range](#range) | Background ranges to display under the chart. |
+| axisFontSize | Number | Font size for axis labels. |
+| labelFontSize | Number | Font size for value label. |
+| titleFontSize | Number | Font size for title. |
+| subtitleFontSize | Number | Font size for subtitle. |
 
 #### Example
 
