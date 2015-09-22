@@ -94,17 +94,109 @@ vcharts.transform = function (spec, options) {
     return spec;
 };
 
+vcharts.isObjectLiteral = function (object) {
+    return object && object.constructor && object.constructor.name === 'Object';
+}
+
+vcharts.isArrayLiteral = function (object) {
+    return object && object.constructor && object.constructor.name === 'Array';
+}
+
+vcharts.extend = function (defaults, options) {
+    var extended,
+        prop,
+        index;
+    if (options === undefined) {
+        return defaults;
+    }
+    if (vcharts.isObjectLiteral(defaults)) {
+        extended = {};
+        for (prop in defaults) {
+            if (Object.prototype.hasOwnProperty.call(defaults, prop)) {
+                extended[prop] = vcharts.extend(defaults[prop], options[prop]);
+            }
+        }
+        for (prop in options) {
+            if (!Object.prototype.hasOwnProperty.call(defaults, prop)) {
+                extended[prop] = options[prop];
+            }
+        }
+        return extended;
+    }
+    if (vcharts.isArrayLiteral(defaults)) {
+        extended = [];
+        for (index = 0; index < defaults.length; index += 1) {
+            extended.push(vcharts.extend(defaults[index], options[index]));
+        }
+        if (vcharts.isArrayLiteral(options)) {
+            for (index = defaults.length; index < options.length; index += 1) {
+                extended.push(options[index]);
+            }
+        }
+        return extended;
+    }
+    return options;
+};
+
+vcharts.deepClone = function (obj) {
+    var el = obj.el, copy;
+    delete obj.el;
+    copy = JSON.parse(JSON.stringify(obj));
+    obj.el = el;
+    copy.el = el;
+    return copy;
+}
+
 vcharts.vegaModule = function (specTemplate) {
-    return function (options) {
-        var spec = vcharts.transform(specTemplate, options);
-        console.log(spec);
-        vg.parse.spec(spec, function (chart) {
-            chart({
-                el: options.el,
-                renderer: options.renderer || 'canvas'
-            }).update();
-        });
-        return this;
+    return function (initialOptions) {
+        var that = this;
+
+        that.options = {};
+
+        that.update = function (newOptions) {
+            var vegaOptions, spec, sizeOptions, curOptions, el;
+
+            that.options = vcharts.extend(that.options, newOptions);
+
+            // Transform pass 1 to get the padding
+            spec = vcharts.transform(specTemplate, vcharts.deepClone(that.options));
+
+            // Use padding and element size to set size
+            el = d3.select(that.options.el)[0][0];
+            sizeOptions = {};
+            if (that.options.width === undefined) {
+                sizeOptions.width = el.offsetWidth;
+                if (spec.padding) {
+                    sizeOptions.width -= spec.padding.left + spec.padding.right;
+                }
+            }
+            if (that.options.height === undefined) {
+                sizeOptions.height = el.offsetHeight;
+                if (spec.padding) {
+                    sizeOptions.height -= spec.padding.top + spec.padding.bottom;
+                }
+            }
+            curOptions = vcharts.extend(that.options, sizeOptions);
+
+            // Options that go directly to Vega runtime
+            vegaOptions = {
+                el: curOptions.el,
+                renderer: curOptions.renderer
+            };
+
+            // Transform pass 2 to get the final visualization
+            spec = vcharts.transform(specTemplate, curOptions);
+            console.log(spec);
+
+            vg.parse.spec(spec, function (chartObj) {
+                var chart = chartObj(vegaOptions);
+                chart.update();
+            });
+        };
+
+        that.update(initialOptions);
+
+        return that;
     };
 };
 
@@ -380,7 +472,7 @@ vcharts.xy = vcharts.vegaModule({
             "init": 0,
             "streams": [
                 {
-                    "type": "mousemove",
+                    "type": "mousemove, wheel",
                     "expr": "eventX()",
                     "scale": { "name": "x", "invert": true }
                 }
@@ -391,7 +483,7 @@ vcharts.xy = vcharts.vegaModule({
             "init": 0,
             "streams": [
                 {
-                    "type": "mousemove",
+                    "type": "mousemove, wheel",
                     "expr": "eventY()",
                     "scale": {"name": "y", "invert": true}
                 }
@@ -408,30 +500,64 @@ vcharts.xy = vcharts.vegaModule({
             ]
         },
         {
-            "name": "xs",
+            "name": "xMinAnchor",
             "streams": [
                 {
                     "type": "mousedown, mouseup, wheel",
-                    "expr": "{min: xMin, max: xMax}"
+                    "expr": "0",
+                    "scale": {"name": "x", "invert": true}
                 }
             ]
         },
         {
-            "name": "ys",
+            "name": "xMaxAnchor",
             "streams": [
                 {
                     "type": "mousedown, mouseup, wheel",
-                    "expr": "{min: yMin, max: yMax}"
+                    "expr": "width",
+                    "scale": {"name": "x", "invert": true}
+                }
+            ]
+        },
+        {
+            "name": "yMinAnchor",
+            "streams": [
+                {
+                    "type": "mousedown, mouseup, wheel",
+                    "expr": "height",
+                    "scale": {"name": "y", "invert": true}
+                }
+            ]
+        },
+        {
+            "name": "yMaxAnchor",
+            "streams": [
+                {
+                    "type": "mousedown, mouseup, wheel",
+                    "expr": "0",
+                    "scale": {"name": "y", "invert": true}
                 }
             ]
         },
         {
             "name": "xMin",
-            "init": { "{{": ["axes.x.range.0", -1.6] },
+            "init": { "{{": ["axes.x.range.0", null] },
             "streams": [
                 {
                     "type": "delta",
-                    "expr": "xs.min + (xs.max-xs.min)*delta.x/width"
+                    "expr": {
+                        "??": [
+                            { "{{": ["axes.x.pan", true] },
+                            {
+                                "??": [
+                                    { "==": [{ "{{": "axes.x.type" }, "time"] },
+                                    "time(xMinAnchor) + (time(xMaxAnchor)-time(xMinAnchor))*delta.x/width",
+                                    "xMinAnchor + (xMaxAnchor-xMinAnchor)*delta.x/width"
+                                ]
+                            },
+                            "xMinAnchor"
+                        ]
+                    }
                 },
                 {
                     "type": "zoom",
@@ -441,11 +567,11 @@ vcharts.xy = vcharts.vegaModule({
                             {
                                 "??": [
                                     { "==": [{ "{{": "axes.x.type" }, "time"] },
-                                    "(xs.min-time(xAnchor))*zoom + time(xAnchor)",
-                                    "(xs.min-xAnchor)*zoom + xAnchor"
+                                    "(time(xMinAnchor)-time(xAnchor))*zoom + time(xAnchor)",
+                                    "(xMinAnchor-xAnchor)*zoom + xAnchor"
                                 ]
                             },
-                            "xs.min"
+                            "xMinAnchor"
                         ]
                     }
                 }
@@ -453,11 +579,23 @@ vcharts.xy = vcharts.vegaModule({
         },
         {
             "name": "xMax",
-            "init": { "{{": ["axes.x.range.1", 1.6] },
+            "init": { "{{": ["axes.x.range.1", null] },
             "streams": [
                 {
                     "type": "delta",
-                    "expr": "xs.max + (xs.max-xs.min)*delta.x/width"
+                    "expr": {
+                        "??": [
+                            { "{{": ["axes.x.pan", true] },
+                            {
+                                "??": [
+                                    { "==": [{ "{{": "axes.x.type" }, "time"] },
+                                    "time(xMaxAnchor) + (time(xMaxAnchor)-time(xMinAnchor))*delta.x/width",
+                                    "xMaxAnchor + (xMaxAnchor-xMinAnchor)*delta.x/width"
+                                ]
+                            },
+                            "xMaxAnchor"
+                        ]
+                    }
                 },
                 {
                     "type": "zoom",
@@ -467,11 +605,11 @@ vcharts.xy = vcharts.vegaModule({
                             {
                                 "??": [
                                     { "==": [{ "{{": "axes.x.type" }, "time"] },
-                                    "(xs.max-time(xAnchor))*zoom + time(xAnchor)",
-                                    "(xs.max-xAnchor)*zoom + xAnchor"
+                                    "(time(xMaxAnchor)-time(xAnchor))*zoom + time(xAnchor)",
+                                    "(xMaxAnchor-xAnchor)*zoom + xAnchor"
                                 ]
                             },
-                            "xs.max"
+                            "xMaxAnchor"
                         ]
                     }
                 }
@@ -479,15 +617,15 @@ vcharts.xy = vcharts.vegaModule({
         },
         {
             "name": "yMin",
-            "init": { "{{": ["axes.y.range.0", -1] },
+            "init": { "{{": ["axes.y.range.0", null] },
             "streams": [
                 {
                     "type": "delta",
                     "expr": {
                         "??": [
                             { "{{": ["axes.y.pan", true] },
-                            "ys.min + (ys.max-ys.min)*delta.y/height",
-                            "ys.min"
+                            "yMinAnchor + (yMaxAnchor-yMinAnchor)*delta.y/height",
+                            "yMinAnchor"
                         ]
                     }
                 },
@@ -499,11 +637,11 @@ vcharts.xy = vcharts.vegaModule({
                             {
                                 "??": [
                                     { "==": [{ "{{": "axes.y.type" }, "time"] },
-                                    "(ys.min-time(yAnchor))*zoom + time(yAnchor)",
-                                    "(ys.min-yAnchor)*zoom + yAnchor"
+                                    "(yMinAnchor-time(yAnchor))*zoom + time(yAnchor)",
+                                    "(yMinAnchor-yAnchor)*zoom + yAnchor"
                                 ]
                             },
-                            "ys.min"
+                            "yMinAnchor"
                         ]
                     }
                 }
@@ -511,15 +649,15 @@ vcharts.xy = vcharts.vegaModule({
         },
         {
             "name": "yMax",
-            "init": { "{{": ["axes.y.range.1", 1] },
+            "init": { "{{": ["axes.y.range.1", null] },
             "streams": [
                 {
                     "type": "delta",
                     "expr": {
                         "??": [
                             { "{{": ["axes.y.pan", true] },
-                            "ys.max + (ys.max-ys.min)*delta.y/height",
-                            "ys.max"
+                            "yMaxAnchor + (yMaxAnchor-yMinAnchor)*delta.y/height",
+                            "yMaxAnchor"
                         ]
                     }
                 },
@@ -531,11 +669,11 @@ vcharts.xy = vcharts.vegaModule({
                             {
                                 "??": [
                                     { "==": [{ "{{": "axes.y.type" }, "time"] },
-                                    "(ys.max-time(yAnchor))*zoom + time(yAnchor)",
-                                    "(ys.max-yAnchor)*zoom + yAnchor"
+                                    "(yMaxAnchor-time(yAnchor))*zoom + time(yAnchor)",
+                                    "(yMaxAnchor-yAnchor)*zoom + yAnchor"
                                 ]
                             },
-                            "ys.max"
+                            "yMaxAnchor"
                         ]
                     }
                 }
@@ -548,6 +686,16 @@ vcharts.xy = vcharts.vegaModule({
             "type": { "{{": ["axes.x.type", "linear"] },
             "range": "width",
             "zero": false,
+            "domain": {
+                "??": [
+                    { "{{": "series.0" },
+                    {
+                        "data": { "{{": "series.0.name" },
+                        "field": "x"
+                    },
+                    [0, 1]
+                ]
+            },
             "domainMin": { "signal": "xMin" },
             "domainMax": { "signal": "xMax" }
         },
@@ -556,6 +704,16 @@ vcharts.xy = vcharts.vegaModule({
             "type": { "{{": ["axes.y.type", "linear"] },
             "range": "height",
             "zero": false,
+            "domain": {
+                "??": [
+                    { "{{": "series.0" },
+                    {
+                        "data": { "{{": "series.0.name" },
+                        "field": "y"
+                    },
+                    [0, 1]
+                ]
+            },
             "domainMin": { "signal": "yMin" },
             "domainMax": { "signal": "yMax" }
         },
