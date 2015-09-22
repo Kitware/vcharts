@@ -255,7 +255,7 @@ vcharts.xy = vcharts.vegaModule({
                     "expr": {
                         "??": [
                             { "{{": ["axes.y.pan", true] },
-                            "yMaxAnchor + (yMaxAnchor-yMinAnchor)*delta.x/height",
+                            "yMaxAnchor + (yMaxAnchor-yMinAnchor)*delta.y/height",
                             "yMaxAnchor"
                         ]
                     }
