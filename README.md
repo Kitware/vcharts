@@ -36,7 +36,7 @@ for (i = 0; i < 100; i += 1) {
     s1.push([{ x: Math.random(), y: Math.random() }]);
     s2.push([{ x: Math.random() + 0.5, y: Math.random() + 0.5 }]);
 }
-vcharts.xy({
+vcharts.chart('xy', {
     el: '#vis',
     series: [
         {
@@ -80,7 +80,7 @@ Visit [http://localhost:8080/index.html](http://localhost:8080/index.html).
 Initialize a chart with the call
 
 ```js
-var chart = vcharts.chartType(options);
+var chart = vcharts.chart(chartType, options);
 ```
 
 where *chartType* is one of the supported chart types.
@@ -111,7 +111,7 @@ will set the *width* and *height* correctly after a DOM update:
 var div = $('#mydiv').css('width', '100px').css('height', '400px');
 
 // Width and height will not be picked up yet since the DOM is not updated.
-var chart = vcharts.chartType({ el: div.get(0), /* more options */ });
+var chart = vcharts.chart(chartType, { el: div.get(0), /* more options */ });
 
 // Refresh width and height here.
 setTimeout(function () { chart.update(); }, 1);
@@ -120,7 +120,7 @@ setTimeout(function () { chart.update(); }, 1);
 The following will resize the chart when the window resizes:
 
 ```js
-var chart = vcharts.chartType({ el: '#mydiv', /* more options */ });
+var chart = vcharts.chart(chartType, { el: '#mydiv', /* more options */ });
 
 // Update size on window resize.
 window.onresize = function () {
@@ -128,7 +128,7 @@ window.onresize = function () {
 };
 ```
 
-### vcharts.vega()
+### vcharts.chart('vega', options)
 
 Generic Vega renderer. The following additional option is supported:
 
@@ -136,7 +136,7 @@ Generic Vega renderer. The following additional option is supported:
 | :-------- | :----- | :----------- |
 | spec      | Object | The Vega spec to render. |
 
-### vcharts.xy()
+### vcharts.chart('xy', options)
 
 Plots (x,y) coordinate pairs as points and/or lines. The following
 additional options are supported:
@@ -176,7 +176,7 @@ following options:
 | pan       | Boolean | Allow panning this axis with mouse drags (default *true*). |
 | zoom      | Boolean | Allow zooming this axis with mouse wheel or swipe (default *true*). |
 
-### vcharts.bullet()
+### vcharts.chart('bullet', options)
 
 Bullet graphs based on the [description by Perceptual Edge](http://www.perceptualedge.com/articles/misc/Bullet_Graph_Design_Spec.pdf).
 The following additional options are supported:
@@ -196,7 +196,7 @@ The following additional options are supported:
 #### Example
 
 ```js
-vcharts.bullet({
+vcharts.chart('bullet', {
     el: '#vis',
     value: 0.8,
     title: 'Error',

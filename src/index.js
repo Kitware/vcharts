@@ -30,7 +30,7 @@ function transform(spec, options) {
         element,
         elementIndex,
         itemIndex,
-        arg1, arg2;
+        arg1, arg2, key;
 
     if (Array.isArray(spec)) {
         transformed = [];
@@ -211,5 +211,3 @@ module.exports = {
     chart: chart,
     templates: templates
 };
-
-global.vcharts = module.exports;

@@ -1,7 +1,9 @@
 {
   "devDependencies": {
+    "exorcist": "^0.4.0",
+    "jshint": "^2.8.0",
     "mocha": "^2.3.3",
-    "exorcist": "^0.4.0"
+    "uglify-js": "^2.4.24"
   },
   "name": "vcharts",
   "description": "Reusable [Vega](http://vega.github.io/vega/) charts.",
@@ -16,7 +18,8 @@
     "vega": "^2.2.6"
   },
   "scripts": {
-    "build": "browserify index.js -d -s vcharts | exorcist vcharts.js.map > vcharts.js",
+    "lint": "jshint src/",
+    "build": "browserify src/index.js -d -s vcharts | exorcist vcharts.js.map > vcharts.js",
     "postbuild": "uglifyjs vcharts.js -cm > vcharts.min.js",
     "test": "mocha"
   },
