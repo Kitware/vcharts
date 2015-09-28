@@ -1,4 +1,4 @@
-vcharts.bullet = vcharts.vegaModule({
+{
     "width": {"{{": ["width", 300]},
     "height": {"{{": ["height", 40]},
     "padding": {
@@ -191,4 +191,4 @@ vcharts.bullet = vcharts.vegaModule({
             }
         }
     ]
-});
+}

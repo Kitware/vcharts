@@ -18,12 +18,12 @@
   "homepage": "https://XDATA-Year-3.github.io/vcharts",
   "ignore": [
     "**/.*",
+    "examples",
     "node_modules",
     "bower_components",
-    "test",
-    "tests"
+    "test"
   ],
   "dependencies": {
-    "vega": "~2.2.5"
+    "vega": "2.2.6"
   }
 }
