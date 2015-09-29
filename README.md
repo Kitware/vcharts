@@ -220,3 +220,28 @@ A range represents a visual range of an axis with background and foreground colo
 | max       | Number | The maximum value of the range. |
 | background | String | The background color of the range. |
 | foreground | String | The color of values and markers that fall in this range (default: `'black'`). |
+
+## Release Instructions
+
+To release a new verison *x.y.z*, first release to npm:
+
+* `npm run test && npm run lint && npm run build` - This should run without errors.
+* `git checkout -b version-x.y.z`
+* Edit `package.json` to set the version to *x.y.z*.
+* `git commit -am "Version bump to x.y.z"`
+* `git push -u origin version-x.y.z`
+* Create PR on GitHub and merge to master.
+* `git checkout master`
+* `git pull`
+* `npm run test && npm run lint && npm run build` - This should again run without errors.
+* `npm publish`
+
+Next, release to Bower, which amounts to creating a tag with the appropriate name
+that contains the built library, which is normally gitignored.
+
+* `git checkout -b bower-x.y.z`
+* `git add -f vcharts*`
+* `git commit -am "Bower x.y.z release"`
+* `git tag x.y.z`
+* `git push origin x.y.z`
+* Go to GitHub releases page and edit the tag to make it a real GitHub release.
