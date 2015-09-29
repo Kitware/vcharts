@@ -1,17 +1,17 @@
 var templates = {
-        'bullet': require('../templates/bullet.json'),
-        'vega': require('../templates/vega.json'),
-        'xy': require('../templates/xy.json')
-    };
+    bullet: require('../templates/bullet.json'),
+    vega: require('../templates/vega.json'),
+    xy: require('../templates/xy.json')
+};
 
-function getNested(spec, parts) {
+var getNested = function (spec, parts) {
     if (spec === undefined || parts.length === 0) {
         return spec;
     }
     return getNested(spec[parts[0]], parts.slice(1));
 }
 
-function setNested(spec, parts, value) {
+var setNested = function (spec, parts, value) {
     if (parts.length === 1) {
         spec[parts[0]] = value;
         return;
@@ -22,7 +22,7 @@ function setNested(spec, parts, value) {
     return setNested(spec[parts[0]], parts.slice(1));
 }
 
-function transform(spec, options) {
+var transform = function (spec, options, scope) {
     var transformed,
         index,
         templateSpec,
@@ -30,12 +30,16 @@ function transform(spec, options) {
         element,
         elementIndex,
         itemIndex,
+        nameParts,
         arg1, arg2, key;
+
+    options = options || {};
+    scope = scope || {};
 
     if (Array.isArray(spec)) {
         transformed = [];
         for (index = 0; index < spec.length; index += 1) {
-            transformed.push(transform(spec[index], options));
+            transformed.push(transform(spec[index], options, scope));
         }
         return transformed;
     }
@@ -51,21 +55,22 @@ function transform(spec, options) {
             if (templateSpec.length < 2) {
                 templateSpec = [templateSpec[0], null];
             }
-            transformed = getNested(options, templateSpec[0].split('.'));
+            nameParts = templateSpec[0].split('.');
+            transformed = getNested(scope, nameParts) || getNested(options, nameParts);
             if (transformed === undefined) {
                 transformed = templateSpec[1];
-                setNested(options, templateSpec[0].split('.'), templateSpec[1]);
+                setNested(scope, nameParts, templateSpec[1]);
             }
             return transformed;
         }
         if (spec['[['] !== undefined) {
             templateSpec = spec['[['];
             transformed = [];
-            elements = transform(templateSpec[0], options);
+            elements = transform(templateSpec[0], options, scope);
             for (elementIndex = 0; elementIndex < elements.length; elementIndex += 1) {
-                options[templateSpec[1]] = elements[elementIndex];
+                scope[templateSpec[1]] = elements[elementIndex];
                 for (itemIndex = 2; itemIndex < templateSpec.length; itemIndex += 1) {
-                    element = transform(templateSpec[itemIndex], options);
+                    element = transform(templateSpec[itemIndex], options, scope);
                     if (element !== null) {
                         transformed.push(element);
                     }
@@ -75,22 +80,22 @@ function transform(spec, options) {
         }
         if (spec['??'] !== undefined) {
             templateSpec = spec['??'];
-            condition = transform(templateSpec[0], options);
+            condition = transform(templateSpec[0], options, scope);
             if (condition) {
-                return transform(templateSpec[1], options);
+                return transform(templateSpec[1], options, scope);
             }
-            return transform(templateSpec[2], options);
+            return transform(templateSpec[2], options, scope);
         }
         if (spec['=='] !== undefined) {
             templateSpec = spec['=='];
-            arg1 = transform(templateSpec[0], options);
-            arg2 = transform(templateSpec[1], options);
+            arg1 = transform(templateSpec[0], options, scope);
+            arg2 = transform(templateSpec[1], options, scope);
             return (arg1 === arg2);
         }
         transformed = {};
         for (key in spec) {
             if (spec.hasOwnProperty(key)) {
-                transformed[key] = transform(spec[key], options);
+                transformed[key] = transform(spec[key], options, scope);
             }
         }
         return transformed;
@@ -98,15 +103,15 @@ function transform(spec, options) {
     return spec;
 }
 
-function isObjectLiteral(object) {
+var isObjectLiteral = function (object) {
     return object && object.constructor && object.constructor.name === 'Object';
 }
 
-function isArrayLiteral(object) {
+var isArrayLiteral = function (object) {
     return object && object.constructor && object.constructor.name === 'Array';
 }
 
-function extend(defaults, options) {
+var extend = function (defaults, options) {
     var extended,
         prop,
         index;
@@ -142,16 +147,7 @@ function extend(defaults, options) {
     return options;
 }
 
-function deepClone(obj) {
-    var el = obj.el, copy;
-    delete obj.el;
-    copy = JSON.parse(JSON.stringify(obj));
-    obj.el = el;
-    copy.el = el;
-    return copy;
-}
-
-function chart(type, initialOptions) {
+var chart = function (type, initialOptions) {
     var that = this;
 
     that.options = {};
@@ -163,7 +159,7 @@ function chart(type, initialOptions) {
         that.options = extend(that.options, newOptions);
 
         // Transform pass 1 to get the padding
-        spec = transform(that.specTemplate, deepClone(that.options));
+        spec = transform(that.specTemplate, that.options);
 
         // Use padding and element size to set size, unless
         // size explicitly specified or element size is zero.
