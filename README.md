@@ -4,7 +4,7 @@ Reusable [Vega](http://vega.github.io/vega/) charts.
 
 ## Getting Started
 
-Install vcharts:
+### Installation with bower
 
 ```
 bower install vcharts
@@ -15,55 +15,70 @@ Setup a scaffold `index.html` with the following contents:
 ```html
 <html>
 <head>
-    <meta charset="UTF-8">
-    <script src="bower_components/d3/d3.min.js"></script>
-    <script src="bower_components/vega/vega.min.js"></script>
-    <script src="bower_components/vcharts/vcharts.min.js"></script>
+  <meta charset="UTF-8">
+  <script src="bower_components/d3/d3.min.js"></script>
+  <script src="bower_components/vega/vega.min.js"></script>
+  <script src="bower_components/vcharts/vcharts.min.js"></script>
 </head>
 <body>
-    <div id="vis"></div>
+  <div id="vis"></div>
 <script>
-// Your script here
+vcharts.chart('xy', {
+  el: '#vis',
+  series: [
+    {
+      name: 'series1',
+      values: [
+        {x: 0, y: 0},
+        {x: 1, y: 1},
+        {x: 2, y: 2},
+        {x: 3, y: 3}
+      ],
+    }
+  ]
+});
 </script>
 </body>
 ```
 
-Plot your chart in the `script` section:
+### Installation with npm
 
-```js
-var s1 = [], s2 = [], i;
-for (i = 0; i < 100; i += 1) {
-    s1.push([{ x: Math.random(), y: Math.random() }]);
-    s2.push([{ x: Math.random() + 0.5, y: Math.random() + 0.5 }]);
-}
-vcharts.chart('xy', {
-    el: '#vis',
-    series: [
-        {
-            name: 'series1',
-            values: s1,
-            color: 'steelblue',
-            line: false,
-            point: true
-        },
-        {
-            name: 'series2',
-            values: s2,
-            color: 'orange',
-            line: false,
-            point: true
-        }
-    ],
-    axes: {
-        x: {
-            range: [0, 1.5]
-        },
-        y: {
-            range: [0, 1.5]
-        }
-    }
-});
 ```
+npm install vcharts vega d3
+```
+
+Setup a scaffold `index.html` with the following contents:
+
+```html
+<html>
+<head>
+  <meta charset="UTF-8">
+  <script src="node_modules/d3/d3.min.js"></script>
+  <script src="node_modules/vega/vega.min.js"></script>
+  <script src="node_modules/vcharts/vcharts.min.js"></script>
+</head>
+<body>
+  <div id="vis"></div>
+<script>
+vcharts.chart('xy', {
+  el: '#vis',
+  series: [
+    {
+      name: 'series1',
+      values: [
+        {x: 0, y: 0},
+        {x: 1, y: 1},
+        {x: 2, y: 2},
+        {x: 3, y: 3}
+      ],
+    }
+  ]
+});
+</script>
+</body>
+```
+
+### View your visualization
 
 Start your favorite local web server:
 
@@ -197,16 +212,16 @@ The following additional options are supported:
 
 ```js
 vcharts.chart('bullet', {
-    el: '#vis',
-    value: 0.8,
-    title: 'Error',
-    subtitle: '% deviation from ground truth',
-    markers: [{value: 0.05}],
-    ranges: [
-        {min: 0, max: 0.1, background: '#eeeeee'},
-        {min: 0.1, max: 0.75, background: '#aaaaaa'},
-        {min: 0.75, max: 1, background: '#888888'}
-    ]
+  el: '#vis',
+  value: 0.8,
+  title: 'Error',
+  subtitle: '% deviation from ground truth',
+  markers: [{value: 0.05}],
+  ranges: [
+    {min: 0, max: 0.1, background: '#eeeeee'},
+    {min: 0.1, max: 0.75, background: '#aaaaaa'},
+    {min: 0.75, max: 1, background: '#888888'}
+  ]
 });
 ```
 
@@ -220,6 +235,27 @@ A range represents a visual range of an axis with background and foreground colo
 | max       | Number | The maximum value of the range. |
 | background | String | The background color of the range. |
 | foreground | String | The color of values and markers that fall in this range (default: `'black'`). |
+
+## Development Build
+
+Clone the repository:
+
+```
+git clone https://github.com/XDATA-Year-3/vcharts.git
+cd vcharts
+```
+
+Build the library:
+
+```
+npm run build
+```
+
+Run the tests:
+
+```
+npm run test
+```
 
 ## Release Instructions
 
