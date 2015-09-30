@@ -307,3 +307,15 @@ that contains the built library, which is normally gitignored.
 * `git tag x.y.z`
 * `git push origin x.y.z`
 * Go to GitHub releases page and edit the tag to make it a real GitHub release.
+
+Make a new version of the website.
+
+* `git checkout master`
+* `npm run build`
+* `git branch -D gh-pages`
+* `git checkout -b gh-pages`
+* `git add -f vcharts*`
+* `git add -f node_modules/d3/d3.*`
+* `git add -f node_modules/vega/vega.*`
+* `git commit -m "Updating website for x.y.z"`
+* `git push -f -u origin gh-pages`
