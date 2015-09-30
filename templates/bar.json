@@ -1,0 +1,122 @@
+{
+    "width": {"{{": ["width", 800]},
+    "height": {"{{": ["height", 500]},
+    "padding": {"{{": ["padding", {"top": 20, "bottom": 50, "left": 50, "right": 10}]},
+    "predicates": [
+        {
+            "name": "tooltip",
+            "type": "==",
+            "operands": [{"signal": "tooltip._id"}, {"arg": "id"}]
+        }
+    ],
+    "data": [
+        {
+            "name": "series",
+            "values": {"{{": "series.values"},
+            "transform": [
+                {
+                    "type": "formula",
+                    "field": "x",
+                    "expr": {"{{": ["series.x", "datum.x"]}
+                },
+                {
+                    "type": "formula",
+                    "field": "y",
+                    "expr": {"{{": ["series.y", "datum.y"]}
+                }
+            ]
+        }
+    ],
+    "signals": [
+        {
+            "name": "tooltip",
+            "init": {},
+            "streams": [
+                {"type": "rect:mouseover", "expr": "datum"},
+                {"type": "rect:mouseout", "expr": "{}"}
+            ]
+        }
+    ],
+    "scales": [
+        {
+            "name": "x",
+            "type": "ordinal",
+            "range": "width",
+            "domain": {
+                "data": "series",
+                "field": "x"
+            }
+        },
+        {
+            "name": "y",
+            "type": {"{{": ["yAxis.type", "linear"]},
+            "range": "height",
+            "zero": true,
+            "domain": {
+                "data": "series",
+                "field": "y"
+            }
+        }
+    ],
+    "axes": [
+        {
+            "type": "x",
+            "scale": "x",
+            "layer": "back",
+            "title": {"{{": ["xAxis.title", ""]}
+        },
+        {
+            "type": "y",
+            "scale": "y",
+            "layer": "back",
+            "title": {"{{": ["yAxis.title", ""]}
+        }
+    ],
+    "marks": [
+        {
+            "type": "rect",
+            "from": {"data": "series"},
+            "properties": {
+                "enter": {
+                    "x": {"scale": "x", "field": "x", "offset": 1},
+                    "width": {"scale": "x", "band": true, "offset": -1},
+                    "y": {"scale": "y", "field": "y"},
+                    "y2": {"scale": "y", "value": 0}
+                },
+                "update": {
+                    "fill": {"value": {"{{": ["series.color", "steelblue"]}}
+                },
+                "hover": {
+                    "fill": {"value": {"{{": ["series.hover", "red"]}}
+                }
+            }
+        },
+        {
+            "type": "text",
+            "properties": {
+                "enter": {
+                    "align": {"value": "center"},
+                    "fill": {"value": "#333"}
+                },
+                "update": {
+                    "x": {"scale": "x", "signal": "tooltip.x"},
+                    "dx": {"scale": "x", "band": true, "mult": 0.5},
+                    "y": {"scale": "y", "signal": "tooltip.y", "offset": -5},
+                    "text": {"template": {"{{": ["tooltip", "{{tooltip.x}}: {{tooltip.y}}"]}},
+                    "fillOpacity": {
+                        "rule": [
+                            {
+                                "predicate": {
+                                    "name": "tooltip",
+                                    "id": {"value": null}
+                                },
+                                "value": 0
+                            },
+                            {"value": 1}
+                        ]
+                    }
+                }
+            }
+        }
+    ]
+}
