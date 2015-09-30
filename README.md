@@ -159,7 +159,9 @@ additional options are supported:
 | Option    | Type   | Description  |
 | :-------- | :----- | :----------- |
 | series    | Array of [Series](#series) | The data series to render. |
-| axes      | Object | An object describing the *x* and *y* axes of the form {x: [Axis](#axis), y: [Axis](#axis)}
+| xAxis     | [Axis](#axis) | An object describing the *x* axis. |
+| yAxis     | [Axis](#axis) | An object describing the *y* axis. |
+| tooltip   | String | Mustache-style string template where `tooltip` is the hovered datum, e.g. `'{{tooltip.x}} -- {{tooltip.y}}'`. |
 
 ### Series
 
@@ -235,6 +237,30 @@ A range represents a visual range of an axis with background and foreground colo
 | max       | Number | The maximum value of the range. |
 | background | String | The background color of the range. |
 | foreground | String | The color of values and markers that fall in this range (default: `'black'`). |
+
+### vcharts.chart('bar', options)
+
+Plots a bar chart. The following additional options are supported:
+
+| Option    | Type   | Description  |
+| :-------- | :----- | :----------- |
+| series    | [Bar Series](#bar-series) | The data series to render. |
+| xAxis     | [Axis](#axis) | An object describing the *x* axis. |
+| yAxis     | [Axis](#axis) | An object describing the *y* axis. |
+| tooltip   | String | Mustache-style string template where `tooltip` is the hovered datum, e.g. `'{{tooltip.x}} -- {{tooltip.y}}'`. |
+
+### Bar Series
+
+A bar series describes the data and visual mappings for an ordered list of bars.
+Bar series objects have the following options:
+
+| Option    | Type   | Description  |
+| :-------- | :----- | :----------- |
+| values    | Array  | The array of items in the series. |
+| x         | String | Accessor for *x* values as a string, where current item is referred to by *datum* (e.g. `'datum.x'`, `'datum[0]'`). |
+| y         | String | Accessor for *y* values as a string, where current item is referred to by *datum* (e.g. `'datum.y'`, `'datum[1]'`). |
+| color     | String | Color as any CSS-compatible color string representation (e.g. `'blue'`, `'#ffffff'`). |
+| hover     | String | Hover color. |
 
 ## Development Build
 

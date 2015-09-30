@@ -47,18 +47,17 @@ var chart = vcharts.chart('xy', {
             point: false
         }
     ],
-    axes: {
-        x: {
-            title: 'Time',
-            type: 'time'
-        },
-        y: {
-            title: 'Value',
-            zoom: false,
-            pan: false,
-            range: [-1, 4]
-        }
+    xAxis: {
+        title: 'Time',
+        type: 'time'
     },
+    yAxis: {
+        title: 'Value',
+        zoom: false,
+        pan: false,
+        range: [-1, 4]
+    },
+    tooltip: '{{tooltip.x}} -- {{tooltip.y}}',
     padding: {top: 100, bottom: 100, left: 100, right: 100}
 });
 

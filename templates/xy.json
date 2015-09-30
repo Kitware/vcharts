@@ -140,16 +140,16 @@
         },
         {
             "name": "xMin",
-            "init": { "{{": ["axes.x.range.0", null] },
+            "init": { "{{": ["xAxis.range.0", null] },
             "streams": [
                 {
                     "type": "delta",
                     "expr": {
                         "??": [
-                            { "{{": ["axes.x.pan", true] },
+                            { "{{": ["xAxis.pan", true] },
                             {
                                 "??": [
-                                    { "==": [{ "{{": "axes.x.type" }, "time"] },
+                                    { "==": [{ "{{": "xAxis.type" }, "time"] },
                                     "time(xMinAnchor) + (time(xMaxAnchor)-time(xMinAnchor))*delta.x/width",
                                     "xMinAnchor + (xMaxAnchor-xMinAnchor)*delta.x/width"
                                 ]
@@ -162,10 +162,10 @@
                     "type": "zoom",
                     "expr": {
                         "??": [
-                            { "{{": ["axes.x.zoom", true] },
+                            { "{{": ["xAxis.zoom", true] },
                             {
                                 "??": [
-                                    { "==": [{ "{{": "axes.x.type" }, "time"] },
+                                    { "==": [{ "{{": "xAxis.type" }, "time"] },
                                     "(time(xMinAnchor)-time(xAnchor))*zoom + time(xAnchor)",
                                     "(xMinAnchor-xAnchor)*zoom + xAnchor"
                                 ]
@@ -178,16 +178,16 @@
         },
         {
             "name": "xMax",
-            "init": { "{{": ["axes.x.range.1", null] },
+            "init": { "{{": ["xAxis.range.1", null] },
             "streams": [
                 {
                     "type": "delta",
                     "expr": {
                         "??": [
-                            { "{{": ["axes.x.pan", true] },
+                            { "{{": ["xAxis.pan", true] },
                             {
                                 "??": [
-                                    { "==": [{ "{{": "axes.x.type" }, "time"] },
+                                    { "==": [{ "{{": "xAxis.type" }, "time"] },
                                     "time(xMaxAnchor) + (time(xMaxAnchor)-time(xMinAnchor))*delta.x/width",
                                     "xMaxAnchor + (xMaxAnchor-xMinAnchor)*delta.x/width"
                                 ]
@@ -200,10 +200,10 @@
                     "type": "zoom",
                     "expr": {
                         "??": [
-                            { "{{": ["axes.x.zoom", true] },
+                            { "{{": ["xAxis.zoom", true] },
                             {
                                 "??": [
-                                    { "==": [{ "{{": "axes.x.type" }, "time"] },
+                                    { "==": [{ "{{": "xAxis.type" }, "time"] },
                                     "(time(xMaxAnchor)-time(xAnchor))*zoom + time(xAnchor)",
                                     "(xMaxAnchor-xAnchor)*zoom + xAnchor"
                                 ]
@@ -216,13 +216,13 @@
         },
         {
             "name": "yMin",
-            "init": { "{{": ["axes.y.range.0", null] },
+            "init": { "{{": ["yAxis.range.0", null] },
             "streams": [
                 {
                     "type": "delta",
                     "expr": {
                         "??": [
-                            { "{{": ["axes.y.pan", true] },
+                            { "{{": ["yAxis.pan", true] },
                             "yMinAnchor + (yMaxAnchor-yMinAnchor)*delta.y/height",
                             "yMinAnchor"
                         ]
@@ -232,10 +232,10 @@
                     "type": "zoom",
                     "expr": {
                         "??": [
-                            { "{{": ["axes.y.zoom", true] },
+                            { "{{": ["yAxis.zoom", true] },
                             {
                                 "??": [
-                                    { "==": [{ "{{": "axes.y.type" }, "time"] },
+                                    { "==": [{ "{{": "yAxis.type" }, "time"] },
                                     "(yMinAnchor-time(yAnchor))*zoom + time(yAnchor)",
                                     "(yMinAnchor-yAnchor)*zoom + yAnchor"
                                 ]
@@ -248,13 +248,13 @@
         },
         {
             "name": "yMax",
-            "init": { "{{": ["axes.y.range.1", null] },
+            "init": { "{{": ["yAxis.range.1", null] },
             "streams": [
                 {
                     "type": "delta",
                     "expr": {
                         "??": [
-                            { "{{": ["axes.y.pan", true] },
+                            { "{{": ["yAxis.pan", true] },
                             "yMaxAnchor + (yMaxAnchor-yMinAnchor)*delta.y/height",
                             "yMaxAnchor"
                         ]
@@ -264,10 +264,10 @@
                     "type": "zoom",
                     "expr": {
                         "??": [
-                            { "{{": ["axes.y.zoom", true] },
+                            { "{{": ["yAxis.zoom", true] },
                             {
                                 "??": [
-                                    { "==": [{ "{{": "axes.y.type" }, "time"] },
+                                    { "==": [{ "{{": "yAxis.type" }, "time"] },
                                     "(yMaxAnchor-time(yAnchor))*zoom + time(yAnchor)",
                                     "(yMaxAnchor-yAnchor)*zoom + yAnchor"
                                 ]
@@ -282,7 +282,7 @@
     "scales": [
         {
             "name": "x",
-            "type": { "{{": ["axes.x.type", "linear"] },
+            "type": { "{{": ["xAxis.type", "linear"] },
             "range": "width",
             "zero": false,
             "domain": {
@@ -300,7 +300,7 @@
         },
         {
             "name": "y",
-            "type": { "{{": ["axes.y.type", "linear"] },
+            "type": { "{{": ["yAxis.type", "linear"] },
             "range": "height",
             "zero": false,
             "domain": {
@@ -341,14 +341,14 @@
             "scale": "x",
             "grid": true,
             "layer": "back",
-            "title": { "{{": ["axes.x.title", ""] }
+            "title": { "{{": ["xAxis.title", ""] }
         },
         {
             "type": "y",
             "scale": "y",
             "grid": true,
             "layer": "back",
-            "title": { "{{": ["axes.y.title", ""] }
+            "title": { "{{": ["yAxis.title", ""] }
         }
     ],
     "legends": [
@@ -445,7 +445,7 @@
                         "update": {
                             "x": { "scale": "x", "signal": "tooltip.x" },
                             "y": { "scale": "y", "signal": "tooltip.y", "offset": -5 },
-                            "text": { "template": "({{tooltip.x|number:'.4g'}}, {{tooltip.y|number:'.4g'}})" },
+                            "text": { "template": {"{{": ["tooltip", "({{tooltip.x|number:'.4g'}}, {{tooltip.y|number:'.4g'}})"]}},
                             "fillOpacity": {
                                 "rule": [
                                     {

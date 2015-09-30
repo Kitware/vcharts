@@ -1,4 +1,5 @@
 var templates = {
+    bar: require('../templates/bar.json'),
     bullet: require('../templates/bullet.json'),
     vega: require('../templates/vega.json'),
     xy: require('../templates/xy.json')
