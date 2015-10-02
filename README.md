@@ -262,6 +262,20 @@ Bar series objects have the following options:
 | color     | String | Color as any CSS-compatible color string representation (e.g. `'blue'`, `'#ffffff'`). |
 | hover     | String | Hover color. |
 
+### vcharts.chart('histogram', options)
+
+| Option    | Type   | Description  |
+| :-------- | :----- | :----------- |
+| xAxis     | [Axis](#axis) | An object describing the *x* axis. |
+| yAxis     | [Axis](#axis) | An object describing the *y* axis. |
+| tooltip   | String | Mustache-style string template where *tooltip* is the hovered bin with the fields *bin* and *count*, e.g. `'Count: {{tooltip.count}}'`. |
+| bin       | String | Accessor for bin values as a string, where current item is referred to by *datum* (e.g. `'datum.x'`, `'datum[0]'`). |
+| values    | Array  | The array of items in the series. |
+| color     | String | Color as any CSS-compatible color string representation (e.g. `'blue'`, `'#ffffff'`). |
+| hover     | String | Hover color. |
+| discrete  | Boolean | If true, treats values as discrete and makes bins for each unique value. If false, treats values as continuous and makes bins that span the range of the data. |
+| maxBins   | Number | The maximum number of bins to use. Unused if discrete is *false*. |
+
 ## Development Build
 
 Clone the repository:
