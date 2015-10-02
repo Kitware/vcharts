@@ -1,6 +1,7 @@
 var templates = {
     bar: require('../templates/bar.json'),
     bullet: require('../templates/bullet.json'),
+    histogram: require('../templates/histogram.json'),
     vega: require('../templates/vega.json'),
     xy: require('../templates/xy.json')
 };
@@ -10,7 +11,7 @@ var getNested = function (spec, parts) {
         return spec;
     }
     return getNested(spec[parts[0]], parts.slice(1));
-}
+};
 
 var setNested = function (spec, parts, value) {
     if (parts.length === 1) {
@@ -20,8 +21,8 @@ var setNested = function (spec, parts, value) {
     if (spec[parts[0]] === undefined) {
         spec[parts[0]] = {};
     }
-    return setNested(spec[parts[0]], parts.slice(1));
-}
+    return setNested(spec[parts[0]], parts.slice(1), value);
+};
 
 var transform = function (spec, options, scope) {
     var transformed,
@@ -93,6 +94,24 @@ var transform = function (spec, options, scope) {
             arg2 = transform(templateSpec[1], options, scope);
             return (arg1 === arg2);
         }
+        if (spec['min()'] !== undefined) {
+            templateSpec = spec['min()'];
+            arg1 = transform(templateSpec[0], options, scope);
+            // Remove "datum"
+            arg2 = transform(templateSpec[1], options, scope).substring(6).split('.');
+            return d3.min(arg1, function (d) {
+                return getNested(d, arg2);
+            });
+        }
+        if (spec['max()'] !== undefined) {
+            templateSpec = spec['max()'];
+            arg1 = transform(templateSpec[0], options, scope);
+            // Remove "datum"
+            arg2 = transform(templateSpec[1], options, scope).substring(6).split('.');
+            return d3.max(arg1, function (d) {
+                return getNested(d, arg2);
+            });
+        }
         transformed = {};
         for (key in spec) {
             if (spec.hasOwnProperty(key)) {
@@ -102,15 +121,15 @@ var transform = function (spec, options, scope) {
         return transformed;
     }
     return spec;
-}
+};
 
 var isObjectLiteral = function (object) {
     return object && object.constructor && object.constructor.name === 'Object';
-}
+};
 
 var isArrayLiteral = function (object) {
     return object && object.constructor && object.constructor.name === 'Array';
-}
+};
 
 var extend = function (defaults, options) {
     var extended,
@@ -146,7 +165,7 @@ var extend = function (defaults, options) {
         return extended;
     }
     return options;
-}
+};
 
 var chart = function (type, initialOptions) {
     var that = this;
@@ -201,7 +220,7 @@ var chart = function (type, initialOptions) {
     that.update(initialOptions);
 
     return that;
-}
+};
 
 module.exports = {
     transform: transform,
