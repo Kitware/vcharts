@@ -44,6 +44,11 @@ describe('transform', function () {
             vcharts.transform(spec, options);
             assert.deepEqual({b: 12}, options);
         });
+
+        it('should allow nested defaulting', function () {
+            var spec = [{'{{': ['a.b', 5]}, {'{{': 'a.b'}];
+            assert.deepEqual([5, 5], vcharts.transform(spec));
+        });
     });
 
     describe('[[ operator', function () {
