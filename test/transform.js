@@ -64,6 +64,15 @@ describe('transform', function () {
             ];
             assert.deepEqual(5, vcharts.transform(spec));
         });
+
+        it('should not override options', function () {
+            var spec = [
+                '@defaults',
+                [['a', 5]],
+                ['@get', 'a']
+            ];
+            assert.deepEqual(7, vcharts.transform(spec, {a: 7}));
+        });
     });
 
     describe('@map', function () {
