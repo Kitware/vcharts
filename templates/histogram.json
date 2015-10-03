@@ -5,9 +5,9 @@
         ["discrete", false]
     ],
     {
-        "width": ["@value", "width", 800],
-        "height": ["@value", "height", 500],
-        "padding": ["@value", "padding", {"top": 20, "bottom": 50, "left": 50, "right": 10}],
+        "width": ["@get", "width", 800],
+        "height": ["@get", "height", 500],
+        "padding": ["@get", "padding", {"top": 20, "bottom": 50, "left": 50, "right": 10}],
         "predicates": [
             {
                 "name": "tooltip",
@@ -18,14 +18,14 @@
         "data": [
             {
                 "name": "series",
-                "values": ["@value", "values"],
+                "values": ["@get", "values"],
                 "transform": [
                     "@if",
-                    ["@value", "discrete"],
+                    ["@get", "discrete"],
                     [
                         {
                             "type": "formula",
-                            "expr": ["@value", "bin"],
+                            "expr": ["@get", "bin"],
                             "field": "bin"
                         },
                         {
@@ -42,7 +42,7 @@
                     [
                         {
                             "type": "formula",
-                            "expr": ["@value", "bin"],
+                            "expr": ["@get", "bin"],
                             "field": "value"
                         },
                         {
@@ -50,15 +50,15 @@
                             "field": "value",
                             "min": [
                                 "@min",
-                                ["@value", "values"],
-                                ["@value", "bin"]
+                                ["@get", "values"],
+                                ["@get", "bin"]
                             ],
                             "max": [
                                 "@max",
-                                ["@value", "values"],
-                                ["@value", "bin"]
+                                ["@get", "values"],
+                                ["@get", "bin"]
                             ],
-                            "maxbins": ["@value", "maxBins", 10]
+                            "maxbins": ["@get", "maxBins", 10]
                         },
                         {
                             "type": "aggregate",
@@ -112,13 +112,13 @@
                 "type": "x",
                 "scale": "x",
                 "layer": "back",
-                "title": ["@value", "xAxis.title", ""],
+                "title": ["@get", "xAxis.title", ""],
                 "properties": {
                     "labels": {
                         "text": {
                             "template": [
                                 "@if",
-                                ["@value", "discrete", false],
+                                ["@get", "discrete", false],
                                 "{{datum.data}}",
                                 "{{datum.data|number:'.2g'}}"
                             ]
@@ -130,7 +130,7 @@
                 "type": "y",
                 "scale": "y",
                 "layer": "back",
-                "title": ["@value", "yAxis.title", ""]
+                "title": ["@get", "yAxis.title", ""]
             }
         ],
         "marks": [
@@ -145,10 +145,10 @@
                         "y2": {"scale": "y", "value": 0}
                     },
                     "update": {
-                        "fill": {"value": ["@value", "color", "steelblue"]}
+                        "fill": {"value": ["@get", "color", "steelblue"]}
                     },
                     "hover": {
-                        "fill": {"value": ["@value", "hover", "red"]}
+                        "fill": {"value": ["@get", "hover", "red"]}
                     }
                 }
             },
@@ -163,7 +163,7 @@
                         "x": {"scale": "x", "signal": "tooltip.bin"},
                         "dx": {"scale": "x", "band": true, "mult": 0.5},
                         "y": {"scale": "y", "signal": "tooltip.count", "offset": -5},
-                        "text": {"template": ["@value", "tooltip", "{{tooltip.count}}"]},
+                        "text": {"template": ["@get", "tooltip", "{{tooltip.count}}"]},
                         "fillOpacity": {
                             "rule": [
                                 {

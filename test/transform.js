@@ -22,24 +22,24 @@ describe('transform', function () {
         });
     });
 
-    describe('@value', function () {
+    describe('@get', function () {
         it('should lookup values', function () {
-            var spec = ['@value', 'a'];
+            var spec = ['@get', 'a'];
             assert.deepEqual(12, vcharts.transform(spec, {a: 12}));
         });
 
         it('should default values', function () {
-            var spec = ['@value', 'a', 5];
+            var spec = ['@get', 'a', 5];
             assert.deepEqual(5, vcharts.transform(spec, {b: 12}));
         });
 
         it('should not reuse default values later', function () {
-            var spec = [['@value', 'a', 5], ['@value', 'a']];
+            var spec = [['@get', 'a', 5], ['@get', 'a']];
             assert.deepEqual([5, null], vcharts.transform(spec, {b: 12}));
         });
 
         it('should not modify options', function () {
-            var spec = [['@value', 'a', 5], ['@value', 'a']];
+            var spec = [['@get', 'a', 5], ['@get', 'a']];
             var options = {b: 12};
             vcharts.transform(spec, options);
             assert.deepEqual({b: 12}, options);
@@ -51,7 +51,7 @@ describe('transform', function () {
             var spec = [
                 '@defaults',
                 [['a.b', 5]],
-                [['@value', 'a.b'], ['@value', 'a.d']]
+                [['@get', 'a.b'], ['@get', 'a.d']]
             ];
             assert.deepEqual([5, 1], vcharts.transform(spec, {a: {d: 1}}));
         });
@@ -60,7 +60,7 @@ describe('transform', function () {
             var spec = [
                 '@defaults',
                 [['a.b', 5]],
-                ['@value', 'a.b']
+                ['@get', 'a.b']
             ];
             assert.deepEqual(5, vcharts.transform(spec));
         });
@@ -68,17 +68,17 @@ describe('transform', function () {
 
     describe('@map', function () {
         it('should build an array', function () {
-            var spec = ['@map', [1, 2, 3], 'd', ['@value', 'd']];
+            var spec = ['@map', [1, 2, 3], 'd', ['@get', 'd']];
             assert.deepEqual([1, 2, 3], vcharts.transform(spec));
         });
 
         it('should not add null array items', function () {
-            var spec = ['@map', [1, null, 3], 'd', ['@value', 'd']];
+            var spec = ['@map', [1, null, 3], 'd', ['@get', 'd']];
             assert.deepEqual([1, 3], vcharts.transform(spec));
         });
 
         it('can contain complex objects', function () {
-            var spec = ['@map', [1, 2, 3], 'd', {a: ['@value', 'd']}];
+            var spec = ['@map', [1, 2, 3], 'd', {a: ['@get', 'd']}];
             assert.deepEqual([{a: 1}, {a: 2}, {a: 3}], vcharts.transform(spec));
         });
 
@@ -92,8 +92,8 @@ describe('transform', function () {
                     ['a', 'b'],
                     'dd',
                     {
-                        d: ['@value', 'd'],
-                        dd: ['@value', 'dd']
+                        d: ['@get', 'd'],
+                        dd: ['@get', 'dd']
                     }
                 ]
             ];
@@ -105,14 +105,14 @@ describe('transform', function () {
         });
 
         it('should not modify options', function () {
-            var spec = ['@map', [1, 2, 3], 'd', ['@value', 'd']];
+            var spec = ['@map', [1, 2, 3], 'd', ['@get', 'd']];
             var options = {b: 12};
             vcharts.transform(spec, options);
             assert.deepEqual({b: 12}, options);
         });
 
         it('should override option with loop variable', function () {
-            var spec = ['@map', [1, 2, 3], 'd', ['@value', 'd']];
+            var spec = ['@map', [1, 2, 3], 'd', ['@get', 'd']];
             var options = {d: 12};
             assert.deepEqual([1, 2, 3], vcharts.transform(spec, options));
             assert.deepEqual({d: 12}, options);
@@ -131,7 +131,7 @@ describe('transform', function () {
         });
 
         it('should work with sub-expressions', function () {
-            var spec = ['@if', ['@value', 'a'], ['@value', 'b'], 20];
+            var spec = ['@if', ['@get', 'a'], ['@get', 'b'], 20];
             assert.deepEqual(5, vcharts.transform(spec, {a: true, b: 5}));
         });
 
@@ -167,8 +167,8 @@ describe('transform', function () {
 
         it('can work with sub-expressions', function () {
             var spec = [
-                ['@eq', ['@value', 'a'], 10],
-                ['@eq', ['@value', 'b'], ['@value', 'c']]
+                ['@eq', ['@get', 'a'], 10],
+                ['@eq', ['@get', 'b'], ['@get', 'c']]
             ];
             assert.deepEqual(
                 [true, true],

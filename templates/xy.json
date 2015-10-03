@@ -5,9 +5,9 @@
         ["height", 500]
     ],
     {
-        "width": ["@value", "width"],
-        "height": ["@value", "height"],
-        "padding": ["@value", "padding", { "top": 10, "bottom": 50, "left": 50, "right": 150 }],
+        "width": ["@get", "width"],
+        "height": ["@get", "height"],
+        "padding": ["@get", "padding", { "top": 10, "bottom": 50, "left": 50, "right": 150 }],
         "predicates": [
             {
                 "name": "tooltip",
@@ -17,31 +17,31 @@
         ],
         "data": [
             "@map",
-            ["@value", "series"],
+            ["@get", "series"],
             "d",
             {
-                "name": ["@value", "d.name"],
-                "values": ["@value", "d.values"],
+                "name": ["@get", "d.name"],
+                "values": ["@get", "d.values"],
                 "transform": [
                     {
                         "type": "formula",
                         "field": "x",
-                        "expr": ["@value", "d.x", "datum.x"]
+                        "expr": ["@get", "d.x", "datum.x"]
                     },
                     {
                         "type": "formula",
                         "field": "y",
-                        "expr": ["@value","d.y", "datum.y"]
+                        "expr": ["@get","d.y", "datum.y"]
                     }
                 ]
             }
         ],
         "signals": [
             {
-                "name": "width", "init": ["@value", "width"]
+                "name": "width", "init": ["@get", "width"]
             },
             {
-                "name": "height", "init": ["@value", "height"]
+                "name": "height", "init": ["@get", "height"]
             },
             {
                 "name": "tooltip",
@@ -145,16 +145,16 @@
             },
             {
                 "name": "xMin",
-                "init": ["@value", "xAxis.range.0", null],
+                "init": ["@get", "xAxis.range.0", null],
                 "streams": [
                     {
                         "type": "delta",
                         "expr": [
                             "@if",
-                            ["@value", "xAxis.pan", true],
+                            ["@get", "xAxis.pan", true],
                             [
                                 "@if",
-                                ["@eq", ["@value", "xAxis.type"], "time"],
+                                ["@eq", ["@get", "xAxis.type"], "time"],
                                 "time(xMinAnchor) + (time(xMaxAnchor)-time(xMinAnchor))*delta.x/width",
                                 "xMinAnchor + (xMaxAnchor-xMinAnchor)*delta.x/width"
                             ],
@@ -165,10 +165,10 @@
                         "type": "zoom",
                         "expr": [
                             "@if",
-                            ["@value", "xAxis.zoom", true],
+                            ["@get", "xAxis.zoom", true],
                             [
                                 "@if",
-                                ["@eq", ["@value", "xAxis.type"], "time"],
+                                ["@eq", ["@get", "xAxis.type"], "time"],
                                 "(time(xMinAnchor)-time(xAnchor))*zoom + time(xAnchor)",
                                 "(xMinAnchor-xAnchor)*zoom + xAnchor"
                             ],
@@ -179,16 +179,16 @@
             },
             {
                 "name": "xMax",
-                "init": ["@value", "xAxis.range.1", null],
+                "init": ["@get", "xAxis.range.1", null],
                 "streams": [
                     {
                         "type": "delta",
                         "expr": [
                             "@if",
-                            ["@value", "xAxis.pan", true],
+                            ["@get", "xAxis.pan", true],
                             [
                                 "@if",
-                                ["@eq", ["@value", "xAxis.type"], "time"],
+                                ["@eq", ["@get", "xAxis.type"], "time"],
                                 "time(xMaxAnchor) + (time(xMaxAnchor)-time(xMinAnchor))*delta.x/width",
                                 "xMaxAnchor + (xMaxAnchor-xMinAnchor)*delta.x/width"
                             ],
@@ -199,10 +199,10 @@
                         "type": "zoom",
                         "expr": [
                             "@if",
-                            ["@value", "xAxis.zoom", true],
+                            ["@get", "xAxis.zoom", true],
                             [
                                 "@if",
-                                ["@eq", ["@value", "xAxis.type"], "time"],
+                                ["@eq", ["@get", "xAxis.type"], "time"],
                                 "(time(xMaxAnchor)-time(xAnchor))*zoom + time(xAnchor)",
                                 "(xMaxAnchor-xAnchor)*zoom + xAnchor"
                             ],
@@ -213,13 +213,13 @@
             },
             {
                 "name": "yMin",
-                "init": ["@value", "yAxis.range.0", null],
+                "init": ["@get", "yAxis.range.0", null],
                 "streams": [
                     {
                         "type": "delta",
                         "expr": [
                             "@if",
-                            ["@value", "yAxis.pan", true],
+                            ["@get", "yAxis.pan", true],
                             "yMinAnchor + (yMaxAnchor-yMinAnchor)*delta.y/height",
                             "yMinAnchor"
                         ]
@@ -228,10 +228,10 @@
                         "type": "zoom",
                         "expr": [
                             "@if",
-                            ["@value", "yAxis.zoom", true],
+                            ["@get", "yAxis.zoom", true],
                             [
                                 "@if",
-                                ["@eq", ["@value", "yAxis.type"], "time"],
+                                ["@eq", ["@get", "yAxis.type"], "time"],
                                 "(yMinAnchor-time(yAnchor))*zoom + time(yAnchor)",
                                 "(yMinAnchor-yAnchor)*zoom + yAnchor"
                             ],
@@ -242,13 +242,13 @@
             },
             {
                 "name": "yMax",
-                "init": ["@value", "yAxis.range.1", null],
+                "init": ["@get", "yAxis.range.1", null],
                 "streams": [
                     {
                         "type": "delta",
                         "expr": [
                             "@if",
-                            ["@value", "yAxis.pan", true],
+                            ["@get", "yAxis.pan", true],
                             "yMaxAnchor + (yMaxAnchor-yMinAnchor)*delta.y/height",
                             "yMaxAnchor"
                         ]
@@ -257,10 +257,10 @@
                         "type": "zoom",
                         "expr": [
                             "@if",
-                            ["@value", "yAxis.zoom", true],
+                            ["@get", "yAxis.zoom", true],
                             [
                                 "@if",
-                                ["@eq", ["@value", "yAxis.type"], "time"],
+                                ["@eq", ["@get", "yAxis.type"], "time"],
                                 "(yMaxAnchor-time(yAnchor))*zoom + time(yAnchor)",
                                 "(yMaxAnchor-yAnchor)*zoom + yAnchor"
                             ],
@@ -273,14 +273,14 @@
         "scales": [
             {
                 "name": "x",
-                "type": ["@value", "xAxis.type", "linear"],
+                "type": ["@get", "xAxis.type", "linear"],
                 "range": "width",
                 "zero": false,
                 "domain": [
                     "@if",
-                    ["@value", "series.0"],
+                    ["@get", "series.0"],
                     {
-                        "data": ["@value", "series.0.name"],
+                        "data": ["@get", "series.0.name"],
                         "field": "x"
                     },
                     [0, 1]
@@ -290,14 +290,14 @@
             },
             {
                 "name": "y",
-                "type": ["@value", "yAxis.type", "linear"],
+                "type": ["@get", "yAxis.type", "linear"],
                 "range": "height",
                 "zero": false,
                 "domain": [
                     "@if",
-                    ["@value", "series.0"],
+                    ["@get", "series.0"],
                     {
-                        "data": ["@value", "series.0.name"],
+                        "data": ["@get", "series.0.name"],
                         "field": "y"
                     },
                     [0, 1]
@@ -310,15 +310,15 @@
                 "type": "ordinal",
                 "domain": [
                     "@map",
-                    ["@value", "series"],
+                    ["@get", "series"],
                     "d",
-                    ["@value", "d.name"]
+                    ["@get", "d.name"]
                 ],
                 "range": [
                     "@map",
-                    ["@value", "series"],
+                    ["@get", "series"],
                     "d",
-                    ["@value", "d.color", "steelblue"]
+                    ["@get", "d.color", "steelblue"]
                 ]
             }
         ],
@@ -328,14 +328,14 @@
                 "scale": "x",
                 "grid": true,
                 "layer": "back",
-                "title": ["@value", "xAxis.title", ""]
+                "title": ["@get", "xAxis.title", ""]
             },
             {
                 "type": "y",
                 "scale": "y",
                 "grid": true,
                 "layer": "back",
-                "title": ["@value", "yAxis.title", ""]
+                "title": ["@get", "yAxis.title", ""]
             }
         ],
         "legends": [
@@ -366,20 +366,20 @@
                         "type": "group",
                         "marks": [
                             "@map",
-                            ["@value", "series"],
+                            ["@get", "series"],
                             "d",
                             [
                                 "@if",
-                                ["@value", "d.line", false],
+                                ["@get", "d.line", false],
                                 {
                                     "type": "line",
-                                    "from": {"data": ["@value", "d.name"]},
+                                    "from": {"data": ["@get", "d.name"]},
                                     "properties": {
                                         "update": {
                                             "x": {"scale": "x", "field": "x"},
                                             "y": {"scale": "y", "field": "y"},
-                                            "stroke": {"scale": "color", "value": ["@value", "d.name"]},
-                                            "strokeWidth": ["@value", "d.lineWidth", 1]
+                                            "stroke": {"scale": "color", "value": ["@get", "d.name"]},
+                                            "strokeWidth": ["@get", "d.lineWidth", 1]
                                         }
                                     }
                                 },
@@ -391,23 +391,23 @@
                         "type": "group",
                         "marks": [
                             "@map",
-                            ["@value", "series"],
+                            ["@get", "series"],
                             "d",
                             [
                                 "@if",
-                                ["@value", "d.point", true],
+                                ["@get", "d.point", true],
                                 {
                                     "type": "symbol",
-                                    "from": {"data": ["@value", "d.name"]},
+                                    "from": {"data": ["@get", "d.name"]},
                                     "properties": {
                                         "update": {
                                             "x": {"scale": "x", "field": "x"},
                                             "y": {"scale": "y", "field": "y"},
-                                            "fill": {"scale": "color", "value": ["@value", "d.name"]},
+                                            "fill": {"scale": "color", "value": ["@get", "d.name"]},
                                             "stroke": {"value": "#444"},
-                                            "shape": {"value": ["@value", "d.shape", "circle"]},
-                                            "strokeWidth": {"value": ["@value", "d.strokeWidth", 0.25]},
-                                            "size": {"value": ["@value", "d.pointSize", 20]}
+                                            "shape": {"value": ["@get", "d.shape", "circle"]},
+                                            "strokeWidth": {"value": ["@get", "d.strokeWidth", 0.25]},
+                                            "size": {"value": ["@get", "d.pointSize", 20]}
                                         },
                                         "hover": {
                                             "size": {"value": 80}
@@ -428,7 +428,7 @@
                             "update": {
                                 "x": {"scale": "x", "signal": "tooltip.x"},
                                 "y": {"scale": "y", "signal": "tooltip.y", "offset": -10},
-                                "text": {"template": ["@value", "tooltip", "({{tooltip.x|number:'.4g'}}, {{tooltip.y|number:'.4g'}})"]},
+                                "text": {"template": ["@get", "tooltip", "({{tooltip.x|number:'.4g'}}, {{tooltip.y|number:'.4g'}})"]},
                                 "fillOpacity": {
                                     "rule": [
                                         {

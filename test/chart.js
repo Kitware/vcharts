@@ -9,8 +9,8 @@ describe('chart', function () {
                 padding = {top: 10, left: 20, bottom: 30, right: 40};
 
             vcharts.templates.test = {
-                width: ['@value', 'width', 100],
-                height: ['@value', 'height', 200],
+                width: ['@get', 'width', 100],
+                height: ['@get', 'height', 200],
                 padding: padding
             };
 

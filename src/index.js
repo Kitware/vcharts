@@ -50,7 +50,7 @@ var templateFunctions = {
         return transform(args[1], options, scope);
     },
 
-    value: function (args, options, scope) {
+    get: function (args, options, scope) {
         var value;
         value = getNested(scope, args[0]) || getNested(options, args[0]);
         if (value === undefined) {

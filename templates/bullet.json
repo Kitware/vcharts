@@ -13,13 +13,13 @@
         ]
     ],
     {
-        "width": ["@value", "width"],
-        "height": ["@value", "height"],
+        "width": ["@get", "width"],
+        "height": ["@get", "height"],
         "padding": {
             "top": 10,
             "left": [
                 "@if",
-                ["@value", "title", ""],
+                ["@get", "title", ""],
                 150,
                 10
             ],
@@ -29,12 +29,12 @@
         "data": [
             {
                 "name": "ranges",
-                "values": ["@value", "ranges"]
+                "values": ["@get", "ranges"]
             },
             {
                 "name": "values",
                 "values": [
-                    {"value": ["@value", "value", 0]}
+                    {"value": ["@get", "value", 0]}
                 ],
                 "transform": [
                     {
@@ -51,7 +51,7 @@
             },
             {
                 "name": "markers",
-                "values": ["@value", "markers", []]
+                "values": ["@get", "markers", []]
             }
         ],
         "scales": [
@@ -64,7 +64,7 @@
             {
                 "name": "y",
                 "type": "linear",
-                "range": [0, ["@value", "height"]],
+                "range": [0, ["@get", "height"]],
                 "domain": [0, 1]
             },
             {
@@ -72,17 +72,17 @@
                 "type": "linear",
                 "range": [
                     "@map",
-                    ["@value", "ranges"],
+                    ["@get", "ranges"],
                     "range",
-                    ["@value", "range.foreground", "black"],
-                    ["@value", "range.foreground", "black"]
+                    ["@get", "range.foreground", "black"],
+                    ["@get", "range.foreground", "black"]
                 ],
                 "domain": [
                     "@map",
-                    ["@value", "ranges"],
+                    ["@get", "ranges"],
                     "range",
-                    ["@value", "range.min"],
-                    ["@value", "range.max"]
+                    ["@get", "range.min"],
+                    ["@get", "range.max"]
                 ]
             }
         ],
@@ -101,7 +101,7 @@
                         "strokeWidth": {"value": 0.5}
                     },
                     "labels": {
-                        "fontSize": {"value": ["@value", "axisFontSize", 14]}
+                        "fontSize": {"value": ["@get", "axisFontSize", 14]}
                     }
                 }
             }
@@ -153,8 +153,8 @@
                     "enter": {
                         "x": {"value": -10},
                         "y": {"scale": "y", "value": 0.5},
-                        "fontSize": {"value": ["@value", "titleFontSize", 20]},
-                        "text": {"value": ["@value", "title", ""]},
+                        "fontSize": {"value": ["@get", "titleFontSize", 20]},
+                        "text": {"value": ["@get", "title", ""]},
                         "align": {"value": "right"},
                         "baseline": {"value": "middle"},
                         "fill": {"value": "black"}
@@ -167,8 +167,8 @@
                     "enter": {
                         "x": {"value": -10},
                         "y": {"scale": "y", "value": 0.5, "offset": 15},
-                        "fontSize": {"value": ["@value", "subtitleFontSize", 12]},
-                        "text": {"value": ["@value", "subtitle", ""]},
+                        "fontSize": {"value": ["@get", "subtitleFontSize", 12]},
+                        "text": {"value": ["@get", "subtitle", ""]},
                         "align": {"value": "right"},
                         "baseline": {"value": "middle"},
                         "fill": {"value": "black"}
@@ -183,9 +183,9 @@
                         "x": {"scale": "x", "field": "value"},
                         "dx": {"field": "dx"},
                         "y": {"scale": "y", "value": 0.5},
-                        "fontSize": {"value": ["@value", "labelFontSize", 16]},
+                        "fontSize": {"value": ["@get", "labelFontSize", 16]},
                         "text": {"template": [
-                            "@value", "display", "{{datum.value|number:'.2g'}}"
+                            "@get", "display", "{{datum.value|number:'.2g'}}"
                         ]},
                         "align": {"field": "align"},
                         "baseline": {"value": "middle"},
