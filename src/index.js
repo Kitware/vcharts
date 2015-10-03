@@ -1,4 +1,4 @@
-libs = require('./libs');
+var libs = require('./libs');
 
 var templates = {
     bar: require('../templates/bar.json'),
@@ -11,14 +11,18 @@ var templates = {
 var d3 = libs.d3;
 var vg = libs.vg;
 
-var getNested = function (spec, parts) {
+var getNestedRec = function (spec, parts) {
     if (spec === undefined || parts.length === 0) {
         return spec;
     }
-    return getNested(spec[parts[0]], parts.slice(1));
+    return getNestedRec(spec[parts[0]], parts.slice(1));
 };
 
-var setNested = function (spec, parts, value) {
+var getNested = function (spec, name) {
+    return getNestedRec(spec, name.split('.'));
+}
+
+var setNestedRec = function (spec, parts, value) {
     if (parts.length === 1) {
         spec[parts[0]] = value;
         return;
@@ -26,24 +30,102 @@ var setNested = function (spec, parts, value) {
     if (spec[parts[0]] === undefined) {
         spec[parts[0]] = {};
     }
-    return setNested(spec[parts[0]], parts.slice(1), value);
+    setNestedRec(spec[parts[0]], parts.slice(1), value);
 };
+
+var setNested = function (spec, name, value) {
+    setNestedRec(spec, name.split('.'), value);
+}
+
+var templateFunctions = {
+    defaults: function (args, options, scope) {
+        var index, value;
+        for (index = 0; index < args[0].length; index += 1) {
+            value = getNested(scope, args[0][index][0]) || getNested(options, args[0][index][0]);
+            if (value === undefined) {
+                value = transform(args[0][index][1], options, scope);
+                setNested(scope, args[0][index][0], value);
+            }
+        }
+        return transform(args[1], options, scope);
+    },
+
+    get: function (args, options, scope) {
+        var value;
+        value = getNested(scope, args[0]) || getNested(options, args[0]);
+        if (value === undefined) {
+            value = args[1];
+        }
+        if (value === undefined) {
+            value = null;
+        }
+        return value;
+    },
+
+    map: function (args, options, scope) {
+        var transformed = [],
+            elements = transform(args[0], options, scope),
+            elementIndex,
+            itemIndex,
+            element;
+
+        for (elementIndex = 0; elementIndex < elements.length; elementIndex += 1) {
+            scope[args[1]] = elements[elementIndex];
+            for (itemIndex = 2; itemIndex < args.length; itemIndex += 1) {
+                element = transform(args[itemIndex], options, scope);
+                if (element !== null) {
+                    transformed.push(element);
+                }
+            }
+        }
+        return transformed;
+    },
+
+    if: function (args, options, scope) {
+        var condition = transform(args[0], options, scope);
+        if (condition) {
+            return transform(args[1], options, scope);
+        }
+        return transform(args[2], options, scope);
+    },
+
+    eq: function (args, options, scope) {
+        var a = transform(args[0], options, scope),
+            b = transform(args[1], options, scope);
+        return (a === b);
+    },
+
+    min: function (args, options, scope) {
+        var array = transform(args[0], options, scope),
+            // Remove "datum"
+            field = transform(args[1], options, scope).substring(6);
+        return d3.min(array, function (d) {
+            return getNested(d, field);
+        });
+    },
+
+    max: function (args, options, scope) {
+        var array = transform(args[0], options, scope),
+            // Remove "datum"
+            field = transform(args[1], options, scope).substring(6);
+        return d3.max(array, function (d) {
+            return getNested(d, field);
+        });
+    }
+}
 
 var transform = function (spec, options, scope) {
     var transformed,
         index,
-        templateSpec,
-        elements,
-        element,
-        elementIndex,
-        itemIndex,
-        nameParts,
-        arg1, arg2, key;
+        key;
 
     options = options || {};
     scope = scope || {};
 
     if (Array.isArray(spec)) {
+        if (spec.length > 0 && (typeof spec[0] === 'string') && spec[0].slice(0, 1) === '@') {
+            return templateFunctions[spec[0].slice(1)](spec.slice(1), options, scope);
+        }
         transformed = [];
         for (index = 0; index < spec.length; index += 1) {
             transformed.push(transform(spec[index], options, scope));
@@ -54,69 +136,6 @@ var transform = function (spec, options, scope) {
         return spec;
     }
     if (typeof spec === 'object') {
-        if (spec['{{'] !== undefined) {
-            templateSpec = spec['{{'];
-            if (typeof templateSpec === 'string') {
-                templateSpec = [templateSpec];
-            }
-            if (templateSpec.length < 2) {
-                templateSpec = [templateSpec[0], null];
-            }
-            nameParts = templateSpec[0].split('.');
-            transformed = getNested(scope, nameParts) || getNested(options, nameParts);
-            if (transformed === undefined) {
-                transformed = templateSpec[1];
-                setNested(scope, nameParts, templateSpec[1]);
-            }
-            return transformed;
-        }
-        if (spec['[['] !== undefined) {
-            templateSpec = spec['[['];
-            transformed = [];
-            elements = transform(templateSpec[0], options, scope);
-            for (elementIndex = 0; elementIndex < elements.length; elementIndex += 1) {
-                scope[templateSpec[1]] = elements[elementIndex];
-                for (itemIndex = 2; itemIndex < templateSpec.length; itemIndex += 1) {
-                    element = transform(templateSpec[itemIndex], options, scope);
-                    if (element !== null) {
-                        transformed.push(element);
-                    }
-                }
-            }
-            return transformed;
-        }
-        if (spec['??'] !== undefined) {
-            templateSpec = spec['??'];
-            condition = transform(templateSpec[0], options, scope);
-            if (condition) {
-                return transform(templateSpec[1], options, scope);
-            }
-            return transform(templateSpec[2], options, scope);
-        }
-        if (spec['=='] !== undefined) {
-            templateSpec = spec['=='];
-            arg1 = transform(templateSpec[0], options, scope);
-            arg2 = transform(templateSpec[1], options, scope);
-            return (arg1 === arg2);
-        }
-        if (spec['min()'] !== undefined) {
-            templateSpec = spec['min()'];
-            arg1 = transform(templateSpec[0], options, scope);
-            // Remove "datum"
-            arg2 = transform(templateSpec[1], options, scope).substring(6).split('.');
-            return d3.min(arg1, function (d) {
-                return getNested(d, arg2);
-            });
-        }
-        if (spec['max()'] !== undefined) {
-            templateSpec = spec['max()'];
-            arg1 = transform(templateSpec[0], options, scope);
-            // Remove "datum"
-            arg2 = transform(templateSpec[1], options, scope).substring(6).split('.');
-            return d3.max(arg1, function (d) {
-                return getNested(d, arg2);
-            });
-        }
         transformed = {};
         for (key in spec) {
             if (spec.hasOwnProperty(key)) {
