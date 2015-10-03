@@ -1,6 +1,8 @@
 {
   "devDependencies": {
+    "codecov.io": "^0.1.6",
     "exorcist": "^0.4.0",
+    "istanbul": "^0.3.21",
     "jshint": "^2.8.0",
     "mocha": "^2.3.3",
     "uglify-js": "^2.4.24"
@@ -18,10 +20,15 @@
     "vega": "^2.2.6"
   },
   "scripts": {
+    "check-coverage": "istanbul check-coverage --statements 95 --branches 90 --functions 100 --lines 95",
     "lint": "jshint src/",
     "build": "browserify src/index.js -d -s vcharts | exorcist vcharts.js.map > vcharts.js",
     "postbuild": "uglifyjs vcharts.js -cm > vcharts.min.js",
-    "test": "mocha"
+    "report-coverage": "cat ./coverage/lcov.info | codecov",
+    "test": "istanbul cover _mocha"
+  },
+  "browser": {
+    "./src/libs.js": "./src/libs-browser.js"
   },
   "repository": {
     "type": "git",

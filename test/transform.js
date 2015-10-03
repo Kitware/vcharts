@@ -45,7 +45,12 @@ describe('transform', function () {
             assert.deepEqual({b: 12}, options);
         });
 
-        it('should allow nested defaulting', function () {
+        it('should allow nested defaulting on defined parent', function () {
+            var spec = [{'{{': ['a.b', 5]}, {'{{': 'a.b'}, {'{{': 'a.d'}];
+            assert.deepEqual([5, 5, 1], vcharts.transform(spec, {a: {d: 1}}));
+        });
+
+        it('should allow nested defaulting on undefined parent', function () {
             var spec = [{'{{': ['a.b', 5]}, {'{{': 'a.b'}];
             assert.deepEqual([5, 5], vcharts.transform(spec));
         });
@@ -163,4 +168,23 @@ describe('transform', function () {
             );
         });
     });
+
+    describe('min', function () {
+        it('should find minimum of array', function () {
+            var spec = {
+                'min()': [[{v: 10}, {v: 2}, {v: 3}, {v: 1}, {v: 8}], 'datum.v']
+            }
+            assert.equal(1, vcharts.transform(spec));
+        });
+    });
+
+    describe('max', function () {
+        it('should find maximum of array', function () {
+            var spec = {
+                'max()': [[{v: 10}, {v: 2}, {v: 3}, {v: 1}, {v: 8}], 'datum.v']
+            }
+            assert.equal(10, vcharts.transform(spec));
+        });
+    });
+
 });

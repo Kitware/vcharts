@@ -1,3 +1,5 @@
+libs = require('./libs');
+
 var templates = {
     bar: require('../templates/bar.json'),
     bullet: require('../templates/bullet.json'),
@@ -5,6 +7,9 @@ var templates = {
     vega: require('../templates/vega.json'),
     xy: require('../templates/xy.json')
 };
+
+var d3 = libs.d3;
+var vg = libs.vg;
 
 var getNested = function (spec, parts) {
     if (spec === undefined || parts.length === 0) {
@@ -168,10 +173,10 @@ var extend = function (defaults, options) {
 };
 
 var chart = function (type, initialOptions) {
-    var that = this;
+    var that = {};
 
     that.options = {};
-    that.specTemplate = templates[type];
+    that.template = templates[type];
 
     that.update = function (newOptions) {
         var vegaOptions, spec, sizeOptions, curOptions, el;
@@ -179,7 +184,7 @@ var chart = function (type, initialOptions) {
         that.options = extend(that.options, newOptions);
 
         // Transform pass 1 to get the padding
-        spec = transform(that.specTemplate, that.options);
+        spec = transform(that.template, that.options);
 
         // Use padding and element size to set size, unless
         // size explicitly specified or element size is zero.
@@ -208,10 +213,9 @@ var chart = function (type, initialOptions) {
         };
 
         // Transform pass 2 to get the final visualization
-        spec = transform(that.specTemplate, curOptions);
-        console.log(spec);
+        that.spec = transform(that.template, curOptions);
 
-        vg.parse.spec(spec, function (chartObj) {
+        vg.parse.spec(that.spec, function (chartObj) {
             var chart = chartObj(vegaOptions);
             chart.update();
         });
