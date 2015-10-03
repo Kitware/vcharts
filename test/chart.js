@@ -9,8 +9,8 @@ describe('chart', function () {
                 padding = {top: 10, left: 20, bottom: 30, right: 40};
 
             vcharts.templates.test = {
-                width: {'{{': ['width', 100]},
-                height: {'{{': ['height', 200]},
+                width: ['@value', 'width', 100],
+                height: ['@value', 'height', 200],
                 padding: padding
             };
 
@@ -43,7 +43,6 @@ describe('chart', function () {
             assert.deepEqual(vcharts.templates.vega, c.template);
             assert.deepEqual({marks: []}, c.spec);
         });
-
     });
 
     describe('update', function () {
