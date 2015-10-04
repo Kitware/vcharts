@@ -33,6 +33,11 @@ describe('transform', function () {
             assert.deepEqual(5, vcharts.transform(spec, {b: 12}));
         });
 
+        it('should evaluate default values', function () {
+            var spec = ['@get', 'a', ['@eq', 5, 2]];
+            assert.deepEqual(false, vcharts.transform(spec, {b: 12}));
+        });
+
         it('should not reuse default values later', function () {
             var spec = [['@get', 'a', 5], ['@get', 'a']];
             assert.deepEqual([5, null], vcharts.transform(spec, {b: 12}));
