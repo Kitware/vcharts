@@ -5,7 +5,8 @@ var templates = {
     bullet: require('../templates/bullet.json'),
     histogram: require('../templates/histogram.json'),
     vega: require('../templates/vega.json'),
-    xy: require('../templates/xy.json')
+    xy: require('../templates/xy.json'),
+    xymatrix: require('../templates/xymatrix.json')
 };
 
 var d3 = libs.d3;
