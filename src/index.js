@@ -55,7 +55,7 @@ var templateFunctions = {
         var value;
         value = getNested(scope, args[0]) || getNested(options, args[0]);
         if (value === undefined) {
-            value = args[1];
+            value = transform(args[1], options, scope);
         }
         if (value === undefined) {
             value = null;

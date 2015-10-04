@@ -15,7 +15,7 @@ d3.json('../data/iris.json', function (data) {
         el: '#vis',
         values: data,
         fields: ["sepalLength", "sepalWidth", "petalLength", "petalWidth"],
-        color: "species"
+        color: {field: "species"}
     });
 
     window.onresize = function () {

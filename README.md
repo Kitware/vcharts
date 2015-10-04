@@ -276,6 +276,16 @@ Bar series objects have the following options:
 | discrete  | Boolean | If true, treats values as discrete and makes bins for each unique value. If false, treats values as continuous and makes bins that span the range of the data. |
 | maxBins   | Number | The maximum number of bins to use. Unused if discrete is *false*. |
 
+### vcharts.chart('xymatrix', options)
+
+| Option    | Type   | Description  |
+| :-------- | :----- | :----------- |
+| values    | Array  | The array of items in the series. |
+| fields    | Array  | The list of fields to use in the matrix of scatterplots. |
+| color.field | String | If set, colors by this field. |
+| color.type  | String | If *color.field* is set, specifies the type of scale (e.g. `"ordinal"` or `"linear"`). |
+| color.value | String | If set, colors by this constant color. |
+
 ## Development Build
 
 Clone the repository:
