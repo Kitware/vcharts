@@ -19,23 +19,20 @@ for (i = 0; i < 1000; i += 1) {
 vcharts.chart('histogram', {
     el: '#vis1',
     values: values,
-    tooltip: 'Count: {{tooltip.count}}',
+    tooltip: 'Count: {{d.count}}',
     maxBins: 20
 });
 
 vcharts.chart('histogram', {
     el: '#vis2',
-    values: [['a'], ['b'], ['c'], ['d'], ['a'], ['b'], ['b']],
-    bin: 'datum[0]',
-    color: 'orange',
+    values: ['a', 'b', 'c', 'd', 'a', 'b', 'b'],
+    bin: 'data',
+    fill: 'orange',
     hover: 'green',
     discrete: true,
-    xAxis: {
-        title: 'Bin'
-    },
-    yAxis: {
-        title: 'Count'
-    }
+    tooltip: '{{d.bin}}: {{d.count}}',
+    xAxis: {title: 'Bin'},
+    yAxis: {title: 'Count'}
 });
 
 </script>

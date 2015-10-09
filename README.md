@@ -257,15 +257,15 @@ Plots a bar chart. The following additional options are supported:
 
 | Option    | Type   | Description  |
 | :-------- | :----- | :----------- |
+| values    | Array  | The array of items in the series. |
+| bin       | String | Field to use for bin values. |
+| discrete  | Boolean | If true, treats values as discrete and makes bins for each unique value. If false, treats values as continuous and makes bins that span the range of the data. |
+| maxBins   | Number | The maximum number of bins to use. Unused if discrete is *true*. |
+| fill      | String | Fill color for the bars. |
+| hover     | String | Fill color when bar is hovered. |
 | xAxis     | [Axis](#axis) | An object describing the *x* axis. |
 | yAxis     | [Axis](#axis) | An object describing the *y* axis. |
-| tooltip   | String | Mustache-style string template where *tooltip* is the hovered bin with the fields *bin* and *count*, e.g. `'Count: {{tooltip.count}}'`. |
-| bin       | String | Accessor for bin values as a string, where current item is referred to by *datum* (e.g. `'datum.x'`, `'datum[0]'`). |
-| values    | Array  | The array of items in the series. |
-| color     | String | Fill color for the bars. |
-| hover     | String | Hover color. |
-| discrete  | Boolean | If true, treats values as discrete and makes bins for each unique value. If false, treats values as continuous and makes bins that span the range of the data. |
-| maxBins   | Number | The maximum number of bins to use. Unused if discrete is *false*. |
+| tooltip   | String | Mustache-style string template where *d* is the hovered bin with the fields *bin* and *count*, e.g. `'Count: {{d.count}}'`. |
 
 ### vcharts.chart('xymatrix', options)
 

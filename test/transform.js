@@ -194,7 +194,7 @@ describe('transform', function () {
     describe('@min', function () {
         it('should find minimum of array', function () {
             var spec = [
-                '@min', [{v: 10}, {v: 2}, {v: 3}, {v: 1}, {v: 8}], 'datum.v'
+                '@min', [{v: 10}, {v: 2}, {v: 3}, {v: 1}, {v: 8}], 'v'
             ]
             assert.equal(1, vcharts.transform(spec));
         });
@@ -203,7 +203,7 @@ describe('transform', function () {
     describe('@max', function () {
         it('should find maximum of array', function () {
             var spec = [
-                '@max', [{v: 10}, {v: 2}, {v: 3}, {v: 1}, {v: 8}], 'datum.v'
+                '@max', [{v: 10}, {v: 2}, {v: 3}, {v: 1}, {v: 8}], 'v'
             ]
             assert.equal(10, vcharts.transform(spec));
         });

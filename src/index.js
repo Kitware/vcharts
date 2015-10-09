@@ -99,8 +99,7 @@ var templateFunctions = {
 
     min: function (args, options, scope) {
         var array = transform(args[0], options, scope),
-            // Remove "datum"
-            field = transform(args[1], options, scope).substring(6);
+            field = transform(args[1], options, scope);
         return d3.min(array, function (d) {
             return getNested(d, field);
         });
@@ -108,8 +107,7 @@ var templateFunctions = {
 
     max: function (args, options, scope) {
         var array = transform(args[0], options, scope),
-            // Remove "datum"
-            field = transform(args[1], options, scope).substring(6);
+            field = transform(args[1], options, scope);
         return d3.max(array, function (d) {
             return getNested(d, field);
         });
