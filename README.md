@@ -286,6 +286,19 @@ Bar series objects have the following options:
 | color.type  | String | If *color.field* is set, specifies the type of scale (e.g. `"ordinal"` or `"linear"`). |
 | color.value | String | If set, colors by this constant color. |
 
+### vcharts.chart('box', options)
+
+Statistical box plot based on work by [Jeffrey Heer and Randy Zwitch](https://groups.google.com/forum/#!topic/vega-js/Y1vLxaw9nuA).
+
+| Option    | Type   | Description  |
+| :-------- | :----- | :----------- |
+| values    | Array  | The array of items in the series. |
+| fields    | Array  | The fields containing the values to summarize in the box plot. |
+| group     | String | The field to group by for multiple boxes per field (optional). |
+| fill      | String | The fill color for the box. |
+| boxSize   | Number | A number from 0 to 1 to specify box size, where a value of 1 makes box widths touch each other, and lower numbers produce spacing between boxes. |
+| capSize   | Number | A number from 0 to 1 to specify end cap size, where a value of 1 makes caps widths touch each other, and lower numbers produce spacing between caps. |
+
 ## Development Build
 
 Clone the repository:

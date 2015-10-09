@@ -2,6 +2,7 @@ var libs = require('./libs');
 
 var templates = {
     bar: require('../templates/bar.json'),
+    box: require('../templates/box.json'),
     bullet: require('../templates/bullet.json'),
     histogram: require('../templates/histogram.json'),
     vega: require('../templates/vega.json'),
@@ -112,6 +113,19 @@ var templateFunctions = {
         return d3.max(array, function (d) {
             return getNested(d, field);
         });
+    },
+
+    join: function (args, options, scope) {
+        var i, join, arr, result = "";
+        sep = transform(args[0], options, scope);
+        arr = transform(args[1], options, scope);
+        for (i = 0; i < arr.length; i += 1) {
+            if (i > 0) {
+                result += sep;
+            }
+            result += arr[i];
+        }
+        return result;
     }
 }
 
