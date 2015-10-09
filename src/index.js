@@ -43,7 +43,10 @@ var templateFunctions = {
     defaults: function (args, options, scope) {
         var index, value;
         for (index = 0; index < args[0].length; index += 1) {
-            value = getNested(scope, args[0][index][0]) || getNested(options, args[0][index][0]);
+            value = getNested(scope, args[0][index][0]);
+            if (value === undefined) {
+                value = getNested(options, args[0][index][0]);
+            }
             if (value === undefined) {
                 value = transform(args[0][index][1], options, scope);
                 setNested(scope, args[0][index][0], value);
@@ -54,7 +57,10 @@ var templateFunctions = {
 
     get: function (args, options, scope) {
         var value;
-        value = getNested(scope, args[0]) || getNested(options, args[0]);
+        value = getNested(scope, args[0]);
+        if (value === undefined) {
+            value = getNested(options, args[0]);
+        }
         if (value === undefined) {
             value = transform(args[1], options, scope);
         }

@@ -33,6 +33,13 @@ describe('transform', function () {
             assert.deepEqual(5, vcharts.transform(spec, {b: 12}));
         });
 
+        it('should only override undefined values', function () {
+            var spec = ['@get', 'a', 5];
+            assert.deepEqual(0, vcharts.transform(spec, {a: 0}));
+            assert.deepEqual(false, vcharts.transform(spec, {a: false}));
+            assert.deepEqual(5, vcharts.transform(spec, {a: undefined}));
+        });
+
         it('should evaluate default values', function () {
             var spec = ['@get', 'a', ['@eq', 5, 2]];
             assert.deepEqual(false, vcharts.transform(spec, {b: 12}));
@@ -77,6 +84,13 @@ describe('transform', function () {
                 ['@get', 'a']
             ];
             assert.deepEqual(7, vcharts.transform(spec, {a: 7}));
+        });
+
+        it('should only override undefined values', function () {
+            var spec = ['@defaults', [['a', 5]], ['@get', 'a']];
+            assert.deepEqual(0, vcharts.transform(spec, {a: 0}));
+            assert.deepEqual(false, vcharts.transform(spec, {a: false}));
+            assert.deepEqual(5, vcharts.transform(spec, {a: undefined}));
         });
     });
 

@@ -161,7 +161,7 @@ additional options are supported:
 | series    | Array of [Series](#series) | The data series to render. |
 | xAxis     | [Axis](#axis) | An object describing the *x* axis. |
 | yAxis     | [Axis](#axis) | An object describing the *y* axis. |
-| tooltip   | String | Mustache-style string template where `tooltip` is the hovered datum, e.g. `'{{tooltip.x}} -- {{tooltip.y}}'`. |
+| tooltip   | String | Mustache-style string template where `d` is the hovered datum, e.g. `'{{d.x}} -- {{d.y}}'`. |
 
 ### Series
 
@@ -170,10 +170,10 @@ Series objects have the following options:
 
 | Option    | Type   | Description  |
 | :-------- | :----- | :----------- |
-| name      | String | The name of the series to show in legend. |
+| name      | String | The name of the series to show in the legend. |
 | values    | Array  | The array of items in the series. |
-| x         | String | Accessor for *x* values as a string, where current item is referred to by *datum* (e.g. `'datum.x'`, `'datum[0]'`). |
-| y         | String | Accessor for *y* values as a string, where current item is referred to by *datum* (e.g. `'datum.y'`, `'datum[1]'`). |
+| x         | String | X position field. |
+| y         | String | Y position field. |
 | color     | String | Color as any CSS-compatible color string representation (e.g. `'blue'`, `'#ffffff'`). |
 | line      | Boolean | Connect the series with a line (default *true*). |
 | point     | Boolean | Render points (default *false*). |
@@ -189,7 +189,7 @@ following options:
 | :-------- | :----- | :----------- |
 | title     | String | The axis title. |
 | type      | String | The mode for axis scale, either `'linear'` (default) or `'time'`. |
-| range     | Array  | Two-element array for the axis range of the form [*min*, *max*]. |
+| range     | Array  | Two-element array for the axis range of the form [*min*, *max*]. Defaults to the range of the data. |
 | pan       | Boolean | Allow panning this axis with mouse drags (default *true*). |
 | zoom      | Boolean | Allow zooming this axis with mouse wheel or swipe (default *true*). |
 
