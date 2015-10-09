@@ -12,7 +12,7 @@
             {
                 "name": "tooltip",
                 "type": "==",
-                "operands": [{"signal": "tooltip._id"}, {"arg": "id"}]
+                "operands": [{"signal": "d._id"}, {"arg": "id"}]
             }
         ],
         "data": [
@@ -26,12 +26,20 @@
                     {
                         "type": "formula",
                         "field": "x",
-                        "expr": ["@get", "d.x", "datum.x"]
+                        "expr": [
+                            "@join",
+                            "",
+                            ["datum['", ["@get", "d.x", "x"], "']"]
+                        ]
                     },
                     {
                         "type": "formula",
                         "field": "y",
-                        "expr": ["@get","d.y", "datum.y"]
+                        "expr": [
+                            "@join",
+                            "",
+                            ["datum['", ["@get", "d.y", "y"], "']"]
+                        ]
                     }
                 ]
             }
@@ -44,7 +52,7 @@
                 "name": "height", "init": ["@get", "height"]
             },
             {
-                "name": "tooltip",
+                "name": "d",
                 "init": {},
                 "streams": [
                     { "type": "symbol:mouseover", "expr": "datum" },
@@ -276,15 +284,17 @@
                 "type": ["@get", "xAxis.type", "linear"],
                 "range": "width",
                 "zero": false,
-                "domain": [
-                    "@if",
-                    ["@get", "series.0"],
-                    {
-                        "data": ["@get", "series.0.name"],
-                        "field": "x"
-                    },
-                    [0, 1]
-                ],
+                "domain": {
+                    "fields": [
+                        "@map",
+                        ["@get", "series"],
+                        "s",
+                        {
+                            "data": ["@get", "s.name"],
+                            "field": "x"
+                        }
+                    ]
+                },
                 "domainMin": {"signal": "xMin"},
                 "domainMax": {"signal": "xMax"}
             },
@@ -293,15 +303,17 @@
                 "type": ["@get", "yAxis.type", "linear"],
                 "range": "height",
                 "zero": false,
-                "domain": [
-                    "@if",
-                    ["@get", "series.0"],
-                    {
-                        "data": ["@get", "series.0.name"],
-                        "field": "y"
-                    },
-                    [0, 1]
-                ],
+                "domain": {
+                    "fields": [
+                        "@map",
+                        ["@get", "series"],
+                        "s",
+                        {
+                            "data": ["@get", "s.name"],
+                            "field": "y"
+                        }
+                    ]
+                },
                 "domainMin": {"signal": "yMin"},
                 "domainMax": {"signal": "yMax"}
             },
@@ -426,9 +438,9 @@
                                 "fill": {"value": "#333"}
                             },
                             "update": {
-                                "x": {"scale": "x", "signal": "tooltip.x"},
-                                "y": {"scale": "y", "signal": "tooltip.y", "offset": -10},
-                                "text": {"template": ["@get", "tooltip", "({{tooltip.x|number:'.4g'}}, {{tooltip.y|number:'.4g'}})"]},
+                                "x": {"scale": "x", "signal": "d.x"},
+                                "y": {"scale": "y", "signal": "d.y", "offset": -10},
+                                "text": {"template": ["@get", "tooltip", "({{d.x|number:'.4g'}}, {{d.y|number:'.4g'}})"]},
                                 "fillOpacity": {
                                     "rule": [
                                         {

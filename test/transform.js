@@ -33,6 +33,13 @@ describe('transform', function () {
             assert.deepEqual(5, vcharts.transform(spec, {b: 12}));
         });
 
+        it('should only override undefined values', function () {
+            var spec = ['@get', 'a', 5];
+            assert.deepEqual(0, vcharts.transform(spec, {a: 0}));
+            assert.deepEqual(false, vcharts.transform(spec, {a: false}));
+            assert.deepEqual(5, vcharts.transform(spec, {a: undefined}));
+        });
+
         it('should evaluate default values', function () {
             var spec = ['@get', 'a', ['@eq', 5, 2]];
             assert.deepEqual(false, vcharts.transform(spec, {b: 12}));
@@ -77,6 +84,13 @@ describe('transform', function () {
                 ['@get', 'a']
             ];
             assert.deepEqual(7, vcharts.transform(spec, {a: 7}));
+        });
+
+        it('should only override undefined values', function () {
+            var spec = ['@defaults', [['a', 5]], ['@get', 'a']];
+            assert.deepEqual(0, vcharts.transform(spec, {a: 0}));
+            assert.deepEqual(false, vcharts.transform(spec, {a: false}));
+            assert.deepEqual(5, vcharts.transform(spec, {a: undefined}));
         });
     });
 
@@ -194,7 +208,7 @@ describe('transform', function () {
     describe('@min', function () {
         it('should find minimum of array', function () {
             var spec = [
-                '@min', [{v: 10}, {v: 2}, {v: 3}, {v: 1}, {v: 8}], 'datum.v'
+                '@min', [{v: 10}, {v: 2}, {v: 3}, {v: 1}, {v: 8}], 'v'
             ]
             assert.equal(1, vcharts.transform(spec));
         });
@@ -203,7 +217,7 @@ describe('transform', function () {
     describe('@max', function () {
         it('should find maximum of array', function () {
             var spec = [
-                '@max', [{v: 10}, {v: 2}, {v: 3}, {v: 1}, {v: 8}], 'datum.v'
+                '@max', [{v: 10}, {v: 2}, {v: 3}, {v: 1}, {v: 8}], 'v'
             ]
             assert.equal(10, vcharts.transform(spec));
         });

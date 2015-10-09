@@ -161,7 +161,7 @@ additional options are supported:
 | series    | Array of [Series](#series) | The data series to render. |
 | xAxis     | [Axis](#axis) | An object describing the *x* axis. |
 | yAxis     | [Axis](#axis) | An object describing the *y* axis. |
-| tooltip   | String | Mustache-style string template where `tooltip` is the hovered datum, e.g. `'{{tooltip.x}} -- {{tooltip.y}}'`. |
+| tooltip   | String | Mustache-style string template where `d` is the hovered data element, e.g. `'{{d.x}} -- {{d.y}}'`. |
 
 ### Series
 
@@ -170,10 +170,10 @@ Series objects have the following options:
 
 | Option    | Type   | Description  |
 | :-------- | :----- | :----------- |
-| name      | String | The name of the series to show in legend. |
+| name      | String | The name of the series to show in the legend. |
 | values    | Array  | The array of items in the series. |
-| x         | String | Accessor for *x* values as a string, where current item is referred to by *datum* (e.g. `'datum.x'`, `'datum[0]'`). |
-| y         | String | Accessor for *y* values as a string, where current item is referred to by *datum* (e.g. `'datum.y'`, `'datum[1]'`). |
+| x         | String | X position field. |
+| y         | String | Y position field. |
 | color     | String | Color as any CSS-compatible color string representation (e.g. `'blue'`, `'#ffffff'`). |
 | line      | Boolean | Connect the series with a line (default *true*). |
 | point     | Boolean | Render points (default *false*). |
@@ -189,7 +189,7 @@ following options:
 | :-------- | :----- | :----------- |
 | title     | String | The axis title. |
 | type      | String | The mode for axis scale, either `'linear'` (default) or `'time'`. |
-| range     | Array  | Two-element array for the axis range of the form [*min*, *max*]. |
+| range     | Array  | Two-element array for the axis range of the form [*min*, *max*]. Defaults to the range of the data. |
 | pan       | Boolean | Allow panning this axis with mouse drags (default *true*). |
 | zoom      | Boolean | Allow zooming this axis with mouse wheel or swipe (default *true*). |
 
@@ -244,37 +244,28 @@ Plots a bar chart. The following additional options are supported:
 
 | Option    | Type   | Description  |
 | :-------- | :----- | :----------- |
-| series    | [Bar Series](#bar-series) | The data series to render. |
+| values    | Array  | The array of items in the series. |
+| x         | String | Field used to set the bar x position. |
+| y         | String | Field used to set bar height. |
+| fill      | String | Fill color for the bars. |
+| hover     | String | Fill color when bar is hovered. |
 | xAxis     | [Axis](#axis) | An object describing the *x* axis. |
 | yAxis     | [Axis](#axis) | An object describing the *y* axis. |
-| tooltip   | String | Mustache-style string template where `tooltip` is the hovered datum, e.g. `'{{tooltip.x}} -- {{tooltip.y}}'`. |
-
-### Bar Series
-
-A bar series describes the data and visual mappings for an ordered list of bars.
-Bar series objects have the following options:
-
-| Option    | Type   | Description  |
-| :-------- | :----- | :----------- |
-| values    | Array  | The array of items in the series. |
-| x         | String | Accessor for *x* values as a string, where current item is referred to by *datum* (e.g. `'datum.x'`, `'datum[0]'`). |
-| y         | String | Accessor for *y* values as a string, where current item is referred to by *datum* (e.g. `'datum.y'`, `'datum[1]'`). |
-| color     | String | Color as any CSS-compatible color string representation (e.g. `'blue'`, `'#ffffff'`). |
-| hover     | String | Hover color. |
+| tooltip   | String | Mustache-style string template where `d` is the hovered data element, e.g. `'{{d.x}} -- {{d.y}}'`. |
 
 ### vcharts.chart('histogram', options)
 
 | Option    | Type   | Description  |
 | :-------- | :----- | :----------- |
+| values    | Array  | The array of items in the series. |
+| bin       | String | Field to use for bin values. |
+| discrete  | Boolean | If true, treats values as discrete and makes bins for each unique value. If false, treats values as continuous and makes bins that span the range of the data. |
+| maxBins   | Number | The maximum number of bins to use. Unused if discrete is *true*. |
+| fill      | String | Fill color for the bars. |
+| hover     | String | Fill color when bar is hovered. |
 | xAxis     | [Axis](#axis) | An object describing the *x* axis. |
 | yAxis     | [Axis](#axis) | An object describing the *y* axis. |
-| tooltip   | String | Mustache-style string template where *tooltip* is the hovered bin with the fields *bin* and *count*, e.g. `'Count: {{tooltip.count}}'`. |
-| bin       | String | Accessor for bin values as a string, where current item is referred to by *datum* (e.g. `'datum.x'`, `'datum[0]'`). |
-| values    | Array  | The array of items in the series. |
-| color     | String | Color as any CSS-compatible color string representation (e.g. `'blue'`, `'#ffffff'`). |
-| hover     | String | Hover color. |
-| discrete  | Boolean | If true, treats values as discrete and makes bins for each unique value. If false, treats values as continuous and makes bins that span the range of the data. |
-| maxBins   | Number | The maximum number of bins to use. Unused if discrete is *false*. |
+| tooltip   | String | Mustache-style string template where *d* is the hovered bin with the fields *bin* and *count*, e.g. `'Count: {{d.count}}'`. |
 
 ### vcharts.chart('xymatrix', options)
 

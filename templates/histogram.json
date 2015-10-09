@@ -1,7 +1,7 @@
 [
     "@defaults",
     [
-        ["bin", "datum.value"],
+        ["bin", "value"],
         ["discrete", false]
     ],
     {
@@ -12,7 +12,7 @@
             {
                 "name": "tooltip",
                 "type": "==",
-                "operands": [{"signal": "tooltip._id"}, {"arg": "id"}]
+                "operands": [{"signal": "d._id"}, {"arg": "id"}]
             }
         ],
         "data": [
@@ -25,8 +25,12 @@
                     [
                         {
                             "type": "formula",
-                            "expr": ["@get", "bin"],
-                            "field": "bin"
+                            "field": "bin",
+                            "expr": [
+                                "@join",
+                                "",
+                                ["datum['", ["@get", "bin"], "']"]
+                            ]
                         },
                         {
                             "type": "aggregate",
@@ -41,13 +45,8 @@
                     ],
                     [
                         {
-                            "type": "formula",
-                            "expr": ["@get", "bin"],
-                            "field": "value"
-                        },
-                        {
                             "type": "bin",
-                            "field": "value",
+                            "field": ["@get", "bin"],
                             "min": [
                                 "@min",
                                 ["@get", "values"],
@@ -76,7 +75,7 @@
         ],
         "signals": [
             {
-                "name": "tooltip",
+                "name": "d",
                 "init": {},
                 "streams": [
                     {"type": "rect:mouseover", "expr": "datum"},
@@ -145,7 +144,7 @@
                         "y2": {"scale": "y", "value": 0}
                     },
                     "update": {
-                        "fill": {"value": ["@get", "color", "steelblue"]}
+                        "fill": {"value": ["@get", "fill", "steelblue"]}
                     },
                     "hover": {
                         "fill": {"value": ["@get", "hover", "red"]}
@@ -160,10 +159,10 @@
                         "fill": {"value": "#333"}
                     },
                     "update": {
-                        "x": {"scale": "x", "signal": "tooltip.bin"},
+                        "x": {"scale": "x", "signal": "d.bin"},
                         "dx": {"scale": "x", "band": true, "mult": 0.5},
-                        "y": {"scale": "y", "signal": "tooltip.count", "offset": -5},
-                        "text": {"template": ["@get", "tooltip", "{{tooltip.count}}"]},
+                        "y": {"scale": "y", "signal": "d.count", "offset": -5},
+                        "text": {"template": ["@get", "tooltip", "{{d.count}}"]},
                         "fillOpacity": {
                             "rule": [
                                 {
