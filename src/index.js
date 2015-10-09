@@ -22,7 +22,7 @@ var getNestedRec = function (spec, parts) {
 
 var getNested = function (spec, name) {
     return getNestedRec(spec, name.split('.'));
-}
+};
 
 var setNestedRec = function (spec, parts, value) {
     if (parts.length === 1) {
@@ -37,7 +37,7 @@ var setNestedRec = function (spec, parts, value) {
 
 var setNested = function (spec, name, value) {
     setNestedRec(spec, name.split('.'), value);
-}
+};
 
 var templateFunctions = {
     defaults: function (args, options, scope) {
@@ -131,7 +131,7 @@ var templateFunctions = {
         }
         return result;
     }
-}
+};
 
 var transform = function (spec, options, scope) {
     var transformed,
