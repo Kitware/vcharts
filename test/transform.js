@@ -209,4 +209,13 @@ describe('transform', function () {
         });
     });
 
+    describe('@join', function () {
+        it('should join strings', function () {
+            var spec = [
+                '@join', ',', ['a', 'b', 'c', 'd']
+            ]
+            assert.equal('a,b,c,d', vcharts.transform(spec));
+        });
+    });
+
 });
