@@ -12,34 +12,30 @@
 <script type="text/javascript">
 vcharts.chart('bar', {
     el: '#vis1',
-    series: {
-        values: [
-            {x: 'a', y: 5},
-            {x: 'b', y: 3},
-            {x: 'c', y: 2},
-            {x: 'd', y: 6},
-            {x: 'e', y: 12},
-            {x: 'f', y: 1},
-            {x: 'g', y: 8},
-            {x: 'h', y: 7},
-            {x: 'i', y: 4},
-            {x: 'j', y: 6},
-            {x: 'k', y: 9},
-            {x: 'l', y: 3}
-        ]
-    }
+    values: [
+        {x: 'a', y: 5},
+        {x: 'b', y: 3},
+        {x: 'c', y: 2},
+        {x: 'd', y: 6},
+        {x: 'e', y: 12},
+        {x: 'f', y: 1},
+        {x: 'g', y: 8},
+        {x: 'h', y: 7},
+        {x: 'i', y: 4},
+        {x: 'j', y: 6},
+        {x: 'k', y: 9},
+        {x: 'l', y: 3}
+    ]
 });
 
 vcharts.chart('bar', {
     el: '#vis2',
-    series: {
-        values: [['a', 5], ['b', 3], ['c', 8], ['d', 2]],
-        x: 'datum[0]',
-        y: 'datum[1]',
-        color: 'orange',
-        hover: 'green'
-    },
-    tooltip: '{{tooltip[1]}}'
+    values: [['a', 5], ['b', 3], ['c', 8], ['d', 2]],
+    x: '0',
+    y: '1',
+    fill: 'orange',
+    hover: 'green',
+    tooltip: '{{d[1]}}'
 });
 
 </script>

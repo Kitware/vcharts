@@ -244,23 +244,14 @@ Plots a bar chart. The following additional options are supported:
 
 | Option    | Type   | Description  |
 | :-------- | :----- | :----------- |
-| series    | [Bar Series](#bar-series) | The data series to render. |
+| values    | Array  | The array of items in the series. |
+| x         | String | Field used to set the bar x position. |
+| y         | String | Field used to set bar height. |
+| fill      | String | Fill color for the bars. |
+| hover     | String | Fill color when bar is hovered. |
 | xAxis     | [Axis](#axis) | An object describing the *x* axis. |
 | yAxis     | [Axis](#axis) | An object describing the *y* axis. |
-| tooltip   | String | Mustache-style string template where `tooltip` is the hovered datum, e.g. `'{{tooltip.x}} -- {{tooltip.y}}'`. |
-
-### Bar Series
-
-A bar series describes the data and visual mappings for an ordered list of bars.
-Bar series objects have the following options:
-
-| Option    | Type   | Description  |
-| :-------- | :----- | :----------- |
-| values    | Array  | The array of items in the series. |
-| x         | String | Accessor for *x* values as a string, where current item is referred to by *datum* (e.g. `'datum.x'`, `'datum[0]'`). |
-| y         | String | Accessor for *y* values as a string, where current item is referred to by *datum* (e.g. `'datum.y'`, `'datum[1]'`). |
-| color     | String | Color as any CSS-compatible color string representation (e.g. `'blue'`, `'#ffffff'`). |
-| hover     | String | Hover color. |
+| tooltip   | String | Mustache-style string template where `d` is the hovered data element, e.g. `'{{d.x}} -- {{d.y}}'`. |
 
 ### vcharts.chart('histogram', options)
 
@@ -271,7 +262,7 @@ Bar series objects have the following options:
 | tooltip   | String | Mustache-style string template where *tooltip* is the hovered bin with the fields *bin* and *count*, e.g. `'Count: {{tooltip.count}}'`. |
 | bin       | String | Accessor for bin values as a string, where current item is referred to by *datum* (e.g. `'datum.x'`, `'datum[0]'`). |
 | values    | Array  | The array of items in the series. |
-| color     | String | Color as any CSS-compatible color string representation (e.g. `'blue'`, `'#ffffff'`). |
+| color     | String | Fill color for the bars. |
 | hover     | String | Hover color. |
 | discrete  | Boolean | If true, treats values as discrete and makes bins for each unique value. If false, treats values as continuous and makes bins that span the range of the data. |
 | maxBins   | Number | The maximum number of bins to use. Unused if discrete is *false*. |
