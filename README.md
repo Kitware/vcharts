@@ -161,7 +161,7 @@ additional options are supported:
 | series    | Array of [Series](#series) | The data series to render. |
 | xAxis     | [Axis](#axis) | An object describing the *x* axis. |
 | yAxis     | [Axis](#axis) | An object describing the *y* axis. |
-| tooltip   | String | Mustache-style string template where `d` is the hovered datum, e.g. `'{{d.x}} -- {{d.y}}'`. |
+| tooltip   | String | Mustache-style string template where `d` is the hovered data element, e.g. `'{{d.x}} -- {{d.y}}'`. |
 
 ### Series
 
