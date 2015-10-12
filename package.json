@@ -32,7 +32,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/XDATA-Year-3/vcharts.git"
+    "url": "git+https://github.com/Kitware/vcharts.git"
   },
   "keywords": [
     "vega",
@@ -43,7 +43,7 @@
   "author": "Jeffrey Baumes <jeff.baumes@kitware.com> (http://www.kitware.com/company/team/baumes.html)",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/XDATA-Year-3/vcharts/issues"
+    "url": "https://github.com/Kitware/vcharts/issues"
   },
-  "homepage": "https://github.com/XDATA-Year-3/vcharts#readme"
+  "homepage": "https://github.com/Kitware/vcharts#readme"
 }

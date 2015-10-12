@@ -15,7 +15,7 @@
     "visualization"
   ],
   "license": "Apache v2.0",
-  "homepage": "https://XDATA-Year-3.github.io/vcharts",
+  "homepage": "https://kitware.github.io/vcharts",
   "ignore": [
     "**/.*",
     "examples",
