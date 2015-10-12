@@ -130,6 +130,36 @@ var templateFunctions = {
             result += arr[i];
         }
         return result;
+    },
+
+    orient: function (args, options, scope) {
+        var dir = transform(args[0], options, scope),
+            obj = transform(args[1], options, scope),
+            key,
+            transformed = {},
+            mapping = {
+                x: 'y',
+                x2: 'y2',
+                xc: 'yc',
+                y: 'x',
+                y2: 'x2',
+                yc: 'xc',
+                width: 'height',
+                height: 'width'
+            };
+        if (dir === 'horizontal') {
+            return obj;
+        }
+        for (key in obj) {
+            if (obj.hasOwnProperty(key)) {
+                if (mapping[key]) {
+                    transformed[mapping[key]] = obj[key];
+                } else {
+                    transformed[key] = obj[key];
+                }
+            }
+        }
+        return transformed;
     }
 };
 
