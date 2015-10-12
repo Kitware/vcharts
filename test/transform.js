@@ -86,6 +86,20 @@ describe('transform', function () {
             assert.deepEqual(7, vcharts.transform(spec, {a: 7}));
         });
 
+        it('should not override values from current scope', function () {
+            var spec = [
+                '@map',
+                [1, 2, 3],
+                'd',
+                [
+                    '@defaults',
+                    [['d', 5]],
+                    ['@get', 'd']
+                ]
+            ];
+            assert.deepEqual([1, 2, 3], vcharts.transform(spec));
+        });
+
         it('should only override undefined values', function () {
             var spec = ['@defaults', [['a', 5]], ['@get', 'a']];
             assert.deepEqual(0, vcharts.transform(spec, {a: 0}));
@@ -232,4 +246,23 @@ describe('transform', function () {
         });
     });
 
+    describe('@orient', function () {
+        it('should leave horizontal specs unchanged', function () {
+            var spec = [
+                '@orient',
+                'horizontal',
+                {x: 1, y: 2, yc: 3, width: 5}
+            ];
+            assert.deepEqual({x: 1, y: 2, yc: 3, width: 5}, vcharts.transform(spec));
+        });
+
+        it('should re-orient vertical specs and leave other props', function () {
+            var spec = [
+                '@orient',
+                'vertical',
+                {x: 1, y: 2, yc: 2, width: 5, hello: 10}
+            ];
+            assert.deepEqual({y: 1, x: 2, xc: 2, height: 5, hello: 10}, vcharts.transform(spec));
+        });
+    });
 });
