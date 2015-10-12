@@ -3,7 +3,9 @@
     [
         ["group", "key"],
         ["boxSize", 0.75],
-        ["capSize", 0.5]
+        ["capSize", 0.5],
+        ["orient", "horizontal"],
+        ["horiz", ["@eq", ["@get", "orient"], "horizontal"]]
     ],
     {
         "name": "boxplot",
@@ -67,14 +69,14 @@
                 "name": "y",
                 "points": true,
                 "padding": 1,
-                "range": "height",
+                "range": ["@if", ["@get", "horiz"], "height", "width"],
                 "domain": {"data": "table", "field": "name", "sort": true},
                 "type": "ordinal",
                 "round": true
             },
             {
                 "name": "ybar",
-                "range": "height",
+                "range": ["@if", ["@get", "horiz"], "height", "width"],
                 "domain": {"data": "table", "field": "name", "sort": true},
                 "type": "ordinal",
                 "round": true
@@ -82,109 +84,137 @@
             {
                 "name": "x",
                 "nice": true,
-                "range": "width",
+                "range": ["@if", ["@get", "horiz"], "width", "height"],
                 "domain": {"data": "table", "field": "value"},
                 "type": "linear",
                 "round": true
             }
         ],
         "axes": [
-            {"type": "x", "scale": "x"},
-            {"type": "y","scale": "y"}
+            {"type": "x", "scale": ["@if", ["@get", "horiz"], "x", "y"]},
+            {"type": "y", "scale": ["@if", ["@get", "horiz"], "y", "x"]}
         ],
         "marks": [
             {
                 "type": "rect",
                 "from": {"data": "calcs"},
                 "properties": {
-                    "enter": {
-                        "x": {"field": "lower", "scale": "x"},
-                        "x2": {"field": "upper", "scale": "x"},
-                        "yc": {"field": "name", "scale": "y"},
-                        "height": {"value": 1},
-                        "fill": {"value": "#888"}
-                    }
+                    "enter": [
+                        "@orient",
+                        ["@get", "orient"],
+                        {
+                            "x": {"field": "lower", "scale": "x"},
+                            "x2": {"field": "upper", "scale": "x"},
+                            "yc": {"field": "name", "scale": "y"},
+                            "height": {"value": 1},
+                            "fill": {"value": "#888"}
+                        }
+                    ]
                 }
             },
             {
                 "type": "rect",
                 "from": {"data": "calcs"},
                 "properties": {
-                    "enter": {
-                        "x": {"scale": "x", "field": "q1_value"},
-                        "x2": {"scale": "x", "field": "q3_value"},
-                        "yc": {"scale": "y", "field": "name"},
-                        "height": {"scale": "ybar", "band": true, "mult": ["@get", "boxSize"]},
-                        "fill": {"value": ["@get", "fill", "white"]},
-                        "stroke": {"value": "#888"}
-                    }
+                    "enter": [
+                        "@orient",
+                        ["@get", "orient"],
+                        {
+                            "x": {"scale": "x", "field": "q1_value"},
+                            "x2": {"scale": "x", "field": "q3_value"},
+                            "yc": {"scale": "y", "field": "name"},
+                            "height": {"scale": "ybar", "band": true, "mult": ["@get", "boxSize"]},
+                            "fill": {"value": ["@get", "fill", "white"]},
+                            "stroke": {"value": "#888"}
+                        }
+                    ]
                 }
             },
             {
                 "type": "rect",
                 "from": {"data": "calcs"},
                 "properties": {
-                    "enter": {
-                        "x": {"scale": "x", "field": "median_value"},
-                        "width": {"value": 2},
-                        "yc": {"scale": "y", "field": "name"},
-                        "height": {"scale": "ybar", "band": true, "mult": ["@get", "boxSize"]},
-                        "fill": {"value": "#000"}
-                    }
+                    "enter": [
+                        "@orient",
+                        ["@get", "orient"],
+                        {
+                            "x": {"scale": "x", "field": "median_value"},
+                            "width": {"value": 2},
+                            "yc": {"scale": "y", "field": "name"},
+                            "height": {"scale": "ybar", "band": true, "mult": ["@get", "boxSize"]},
+                            "fill": {"value": "#000"}
+                        }
+                    ]
                 }
             },
             {
                 "type": "rect",
                 "from": {"data": "calcs"},
                 "properties": {
-                    "enter": {
-                        "x": {"scale": "x", "field": "lower"},
-                        "width": {"value": 1},
-                        "yc": {"scale": "y", "field": "name"},
-                        "height": {"scale": "ybar", "band": true, "mult": ["@get", "capSize"]},
-                        "fill": {"value": "#000"}
-                    }
+                    "enter": [
+                        "@orient",
+                        ["@get", "orient"],
+                        {
+                            "x": {"scale": "x", "field": "lower"},
+                            "width": {"value": 1},
+                            "yc": {"scale": "y", "field": "name"},
+                            "height": {"scale": "ybar", "band": true, "mult": ["@get", "capSize"]},
+                            "fill": {"value": "#000"}
+                        }
+                    ]
                 }
             },
             {
                 "type": "rect",
                 "from": {"data": "calcs"},
                 "properties": {
-                    "enter": {
-                        "x": {"scale": "x", "field": "upper"},
-                        "width": {"value": 1},
-                        "yc": {"scale": "y", "field": "name"},
-                        "height": {"scale": "ybar", "band": true, "mult": ["@get", "capSize"]},
-                        "fill": {"value": "#000"}
-                    }
+                    "enter": [
+                        "@orient",
+                        ["@get", "orient"],
+                        {
+                            "x": {"scale": "x", "field": "upper"},
+                            "width": {"value": 1},
+                            "yc": {"scale": "y", "field": "name"},
+                            "height": {"scale": "ybar", "band": true, "mult": ["@get", "capSize"]},
+                            "fill": {"value": "#000"}
+                        }
+                    ]
                 }
             },
             {
                 "type": "symbol",
                 "from": {"data": "calcs"},
                 "properties": {
-                    "enter": {
-                        "x": {"scale": "x", "field": "min_value"},
-                        "yc": {"scale": "y", "field": "name"},
-                        "size": {"value": 20},
-                        "stroke": {"value": "#000"},
-                        "fill": {"value": "#fff"},
-                        "opacity": {"field": "min_value_opacity"}
-                    }
+                    "enter": [
+                        "@orient",
+                        ["@get", "orient"],
+                        {
+                            "x": {"scale": "x", "field": "min_value"},
+                            "yc": {"scale": "y", "field": "name"},
+                            "size": {"value": 20},
+                            "stroke": {"value": "#000"},
+                            "fill": {"value": "#fff"},
+                            "opacity": {"field": "min_value_opacity"}
+                        }
+                    ]
                 }
             },
             {
                 "type": "symbol",
                 "from": {"data": "calcs"},
                 "properties": {
-                    "enter": {
-                        "x": {"scale": "x", "field": "max_value"},
-                        "yc": {"scale": "y", "field": "name"},
-                        "size": {"value": 20},
-                        "stroke": {"value": "#000"},
-                        "fill": {"value": "#fff"},
-                        "opacity": {"field": "max_value_opacity"}
-                    }
+                    "enter": [
+                        "@orient",
+                        ["@get", "orient"],
+                        {
+                            "x": {"scale": "x", "field": "max_value"},
+                            "yc": {"scale": "y", "field": "name"},
+                            "size": {"value": 20},
+                            "stroke": {"value": "#000"},
+                            "fill": {"value": "#fff"},
+                            "opacity": {"field": "max_value_opacity"}
+                        }
+                    ]
                 }
             }
         ]
