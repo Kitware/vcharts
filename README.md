@@ -287,6 +287,7 @@ Statistical box plot based on work by [Jeffrey Heer and Randy Zwitch](https://gr
 | fields    | Array  | The fields containing the values to summarize in the box plot. |
 | group     | String | The field to group by for multiple boxes per field (optional). |
 | fill      | String | The fill color for the box. |
+| orient    | String | The orientation of the boxes, either `horizontal` or `vertical`. |
 | boxSize   | Number | A number from 0 to 1 to specify box size, where a value of 1 makes box widths touch each other, and lower numbers produce spacing between boxes. |
 | capSize   | Number | A number from 0 to 1 to specify end cap size, where a value of 1 makes caps widths touch each other, and lower numbers produce spacing between caps. |
 
