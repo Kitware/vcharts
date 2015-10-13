@@ -348,3 +348,6 @@ Make a new version of the website.
 * `git add -f node_modules/vega/vega.*`
 * `git commit -m "Updating website for x.y.z"`
 * `git push -f -u origin gh-pages`
+* `rm -rf node_modules/`
+* `npm install`
+* `npm run build`
