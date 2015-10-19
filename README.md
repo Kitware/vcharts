@@ -192,6 +192,7 @@ following options:
 | range     | Array  | Two-element array for the axis range of the form [*min*, *max*]. Defaults to the range of the data. |
 | pan       | Boolean | Allow panning this axis with mouse drags (default *true*). |
 | zoom      | Boolean | Allow zooming this axis with mouse wheel or swipe (default *true*). |
+| ticks     | Array   | Specific values for tick marks on the axis. |
 
 ### vcharts.chart('bullet', options)
 
@@ -290,6 +291,15 @@ Statistical box plot based on work by [Jeffrey Heer and Randy Zwitch](https://gr
 | orient    | String | The orientation of the boxes, either `horizontal` or `vertical`. |
 | boxSize   | Number | A number from 0 to 1 to specify box size, where a value of 1 makes box widths touch each other, and lower numbers produce spacing between boxes. |
 | capSize   | Number | A number from 0 to 1 to specify end cap size, where a value of 1 makes caps widths touch each other, and lower numbers produce spacing between caps. |
+
+### vcharts.chart('gantt', options)
+
+Gantt chart.
+
+| Option    | Type   | Description  |
+| :-------- | :----- | :----------- |
+| values    | Array  | The array of items in the Gantt chart. Each object should have the fields *label* (the name of the item), *level* (either 1 for top-level or 2 for secondary), *enter* (the start value), and *leave* (the end value). Each item will be represented by a horizontal bar from *enter* to *leave*. |
+| xAxis     | [Axis](#axis) | Attributes for the x (time) axis. |
 
 ## Development Build
 
