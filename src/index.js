@@ -4,6 +4,7 @@ var templates = {
     bar: require('../templates/bar.json'),
     box: require('../templates/box.json'),
     bullet: require('../templates/bullet.json'),
+    gantt: require('../templates/gantt.json'),
     histogram: require('../templates/histogram.json'),
     vega: require('../templates/vega.json'),
     xy: require('../templates/xy.json'),
