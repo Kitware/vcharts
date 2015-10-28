@@ -1,6 +1,7 @@
 var libs = require('./libs');
 
 var templates = {
+    axis: require('../templates/axis.json'),
     bar: require('../templates/bar.json'),
     box: require('../templates/box.json'),
     bullet: require('../templates/bullet.json'),
@@ -51,6 +52,15 @@ var templateFunctions = {
                 value = transform(args[0][index][1], options, scope);
                 setNested(scope, args[0][index][0], value);
             }
+        }
+        return transform(args[1], options, scope);
+    },
+
+    let: function (args, options, scope) {
+        var index, value;
+        for (index = 0; index < args[0].length; index += 1) {
+            value = transform(args[0][index][1], options, scope);
+            setNested(scope, args[0][index][0], value);
         }
         return transform(args[1], options, scope);
     },
@@ -130,6 +140,20 @@ var templateFunctions = {
             result += arr[i];
         }
         return result;
+    },
+
+    merge: function (args, options, scope) {
+        var i, merged = transform(args[0], options, scope);
+        for (i = 1; i < args.length; i += 1) {
+            merged = merge(merged, transform(args[i], options, scope));
+        }
+        return merged;
+    },
+
+    apply: function (args, options, scope) {
+        var templateName = transform(args[0], options, scope),
+            templateOptions = transform(args[1], options, scope);
+        return transform(templates[templateName], templateOptions);
     },
 
     orient: function (args, options, scope) {
@@ -240,7 +264,43 @@ var extend = function (defaults, options) {
     return options;
 };
 
-var chart = function (type, initialOptions) {
+var merge = function (defaults, options) {
+    var extended,
+        prop,
+        index;
+    if (options === undefined) {
+        return defaults;
+    }
+    if (isObjectLiteral(defaults)) {
+        extended = {};
+        for (prop in defaults) {
+            if (Object.prototype.hasOwnProperty.call(defaults, prop)) {
+                extended[prop] = merge(defaults[prop], options[prop]);
+            }
+        }
+        for (prop in options) {
+            if (!Object.prototype.hasOwnProperty.call(extended, prop)) {
+                extended[prop] = options[prop];
+            }
+        }
+        return extended;
+    }
+    if (isArrayLiteral(defaults)) {
+        extended = [];
+        for (index = 0; index < defaults.length; index += 1) {
+            extended.push(defaults[index]);
+        }
+        if (isArrayLiteral(options)) {
+            for (index = 0; index < options.length; index += 1) {
+                extended.push(options[index]);
+            }
+        }
+        return extended;
+    }
+    return options;
+};
+
+var chart = function (type, initialOptions, done) {
     var that = {};
 
     that.options = {};
@@ -286,6 +346,9 @@ var chart = function (type, initialOptions) {
         vg.parse.spec(that.spec, function (chartObj) {
             var chart = chartObj(vegaOptions);
             chart.update();
+            if (done) {
+                done(chart);
+            }
         });
     };
 
