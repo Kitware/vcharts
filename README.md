@@ -327,38 +327,54 @@ npm run test
 
 To release a new verison *x.y.z*, first release to npm:
 
-* `npm run test && npm run lint && npm run build` - This should run without errors.
-* `git checkout -b version-x.y.z`
-* Edit `package.json` to set the version to *x.y.z*.
-* `git commit -am "Version bump to x.y.z"`
-* `git push -u origin version-x.y.z`
-* Create PR on GitHub and merge to master.
-* `git checkout master`
-* `git pull`
-* `npm run test && npm run lint && npm run build` - This should again run without errors.
-* `npm publish`
+```bash
+export VERSION=x.y.z
+npm run test && npm run lint && npm run build # Should run without errors
+git checkout -b version-$VERSION
+```
+
+Edit `package.json` to set the version to *x.y.z*, then:
+
+```bash
+git commit -am "Version bump to $VERSION"
+git push -u origin version-$VERSION
+```
+
+Create PR on GitHub and merge to master, then:
+
+```bash
+git checkout master
+git pull
+npm run test && npm run lint && npm run build # This should again run without errors.
+npm publish
+```
 
 Next, release to Bower, which amounts to creating a tag with the appropriate name
 that contains the built library, which is normally gitignored.
 
-* `git checkout -b bower-x.y.z`
-* `git add -f vcharts*`
-* `git commit -am "Bower x.y.z release"`
-* `git tag x.y.z`
-* `git push origin x.y.z`
-* Go to GitHub releases page and edit the tag to make it a real GitHub release.
+```bash
+git checkout -b bower-$VERSION
+git add -f vcharts*
+git commit -am "Bower $VERSION release"
+git tag $VERSION
+git push origin $VERSION
+```
 
-Make a new version of the website.
+Go to GitHub releases page and edit the tag to make it a real GitHub release.
 
-* `git checkout master`
-* `npm run build`
-* `git branch -D gh-pages`
-* `git checkout -b gh-pages`
-* `git add -f vcharts*`
-* `git add -f node_modules/d3/d3.*`
-* `git add -f node_modules/vega/vega.*`
-* `git commit -m "Updating website for x.y.z"`
-* `git push -f -u origin gh-pages`
-* `rm -rf node_modules/`
-* `npm install`
-* `npm run build`
+To make a new version of the website:
+
+```bash
+git checkout master
+npm run build
+git branch -D gh-pages
+git checkout -b gh-pages
+git add -f vcharts*
+git add -f node_modules/d3/d3.*
+git add -f node_modules/vega/vega.*
+git commit -m "Updating website for $VERSION"
+git push -f -u origin gh-pages
+rm -rf node_modules/
+npm install
+npm run build
+```
