@@ -20,7 +20,9 @@ vcharts.chart('histogram', {
     el: '#vis1',
     values: values,
     tooltip: 'Count: {{d.count}}',
-    maxBins: 20
+    maxBins: 20,
+    xAxis: {title: 'Bin'},
+    yAxis: {title: 'Count'}
 });
 
 vcharts.chart('histogram', {

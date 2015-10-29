@@ -189,7 +189,8 @@ following options:
 | :-------- | :----- | :----------- |
 | title     | String | The axis title. |
 | type      | String | The mode for axis scale, either `'linear'` (default) or `'time'`. |
-| range     | Array  | Two-element array for the axis range of the form [*min*, *max*]. Defaults to the range of the data. |
+| domain    | Array  | Two-element domain for the axis range of the form [*min*, *max*]. Defaults to the range of the data. |
+| grid      | Boolean | Show gridlines (default *false*). |
 | pan       | Boolean | Allow panning this axis with mouse drags (default *true*). |
 | zoom      | Boolean | Allow zooming this axis with mouse wheel or swipe (default *true*). |
 | ticks     | Array   | Specific values for tick marks on the axis. |
