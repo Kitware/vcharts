@@ -297,7 +297,7 @@ var merge = function (defaults, options) {
         }
         return extended;
     }
-    return options;
+    return defaults;
 };
 
 var chart = function (type, initialOptions, done) {

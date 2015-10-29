@@ -108,6 +108,56 @@ describe('transform', function () {
         });
     });
 
+    describe('@let', function () {
+        it('should allow nested defaulting on defined parent', function () {
+            var spec = [
+                '@let',
+                [['a', {}], ['a.b', 5]],
+                [['@get', 'a.b'], ['@get', 'a.d']]
+            ];
+            assert.deepEqual([5, 1], vcharts.transform(spec, {a: {d: 1}}));
+        });
+
+        it('should allow nested defaulting on undefined parent', function () {
+            var spec = [
+                '@let',
+                [['a.b', 5]],
+                ['@get', 'a.b']
+            ];
+            assert.deepEqual(5, vcharts.transform(spec));
+        });
+
+        it('should override options', function () {
+            var spec = [
+                '@let',
+                [['a', 5]],
+                ['@get', 'a']
+            ];
+            assert.deepEqual(5, vcharts.transform(spec, {a: 7}));
+        });
+
+        it('should override values from current scope', function () {
+            var spec = [
+                '@map',
+                [1, 2, 3],
+                'd',
+                [
+                    '@let',
+                    [['d', 5]],
+                    ['@get', 'd']
+                ]
+            ];
+            assert.deepEqual([5, 5, 5], vcharts.transform(spec));
+        });
+
+        it('should only override undefined values', function () {
+            var spec = ['@defaults', [['a', 5]], ['@get', 'a']];
+            assert.deepEqual(0, vcharts.transform(spec, {a: 0}));
+            assert.deepEqual(false, vcharts.transform(spec, {a: false}));
+            assert.deepEqual(5, vcharts.transform(spec, {a: undefined}));
+        });
+    });
+
     describe('@map', function () {
         it('should build an array', function () {
             var spec = ['@map', [1, 2, 3], 'd', ['@get', 'd']];
@@ -265,4 +315,54 @@ describe('transform', function () {
             assert.deepEqual({y: 1, x: 2, xc: 2, height: 5, hello: 10}, vcharts.transform(spec));
         });
     });
+
+    describe('@merge', function () {
+        it('should merge objects', function () {
+            var spec = [
+                '@merge',
+                {a: 1},
+                {b: 2},
+                {c: 3}
+            ];
+            assert.deepEqual({a: 1, b: 2, c: 3}, vcharts.transform(spec));
+        });
+
+        it('should merge arrays', function () {
+            var spec = [
+                '@merge',
+                {a: [1]},
+                {a: []},
+                {a: [2, 3]}
+            ];
+            assert.deepEqual({a: [1, 2, 3]}, vcharts.transform(spec));
+        });
+
+        it('should give precedence to first data type if they dont match', function () {
+            var spec = [
+                '@merge',
+                {a: [1]},
+                {a: 'b'}
+            ];
+            assert.deepEqual({a: [1]}, vcharts.transform(spec));
+            spec = [
+                '@merge',
+                {a: 'b'},
+                {a: [1]}
+            ];
+            assert.deepEqual({a: 'b'}, vcharts.transform(spec));
+        });
+    });
+
+    describe('@apply', function () {
+        it('should apply template', function () {
+            var spec = [
+                '@apply',
+                'test',
+                {a: 'world'}
+            ];
+            vcharts.templates.test = {hello: ['@get', 'a']};
+            assert.deepEqual({hello: 'world'}, vcharts.transform(spec));
+        });
+    });
+
 });
