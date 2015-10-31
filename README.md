@@ -374,6 +374,7 @@ git add -f node_modules/d3/d3.*
 git add -f node_modules/vega/vega.*
 git commit -m "Updating website for $VERSION"
 git push -f -u origin gh-pages
+git checkout master
 rm -rf node_modules/
 npm install
 npm run build

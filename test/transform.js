@@ -269,24 +269,6 @@ describe('transform', function () {
         });
     });
 
-    describe('@min', function () {
-        it('should find minimum of array', function () {
-            var spec = [
-                '@min', [{v: 10}, {v: 2}, {v: 3}, {v: 1}, {v: 8}], 'v'
-            ]
-            assert.equal(1, vcharts.transform(spec));
-        });
-    });
-
-    describe('@max', function () {
-        it('should find maximum of array', function () {
-            var spec = [
-                '@max', [{v: 10}, {v: 2}, {v: 3}, {v: 1}, {v: 8}], 'v'
-            ]
-            assert.equal(10, vcharts.transform(spec));
-        });
-    });
-
     describe('@join', function () {
         it('should join strings', function () {
             var spec = [
@@ -351,6 +333,28 @@ describe('transform', function () {
             ];
             assert.deepEqual({a: 'b'}, vcharts.transform(spec));
         });
+
+        it('should use the other if one is null or undefined', function () {
+            var spec = [
+                '@merge',
+                {
+                    a: null,
+                    b: undefined
+                },
+                {a: 'a', b: 'b'}
+            ];
+            assert.deepEqual({a: 'a', b: 'b'}, vcharts.transform(spec));
+            spec = [
+                '@merge',
+                {a: 'a', b: 'b'},
+                {
+                    a: null,
+                    b: undefined
+                }
+            ];
+            assert.deepEqual({a: 'a', b: 'b'}, vcharts.transform(spec));
+        });
+
     });
 
     describe('@apply', function () {

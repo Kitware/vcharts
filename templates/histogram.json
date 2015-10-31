@@ -87,16 +87,7 @@
                             {
                                 "type": "bin",
                                 "field": ["@get", "bin"],
-                                "min": [
-                                    "@min",
-                                    ["@get", "values"],
-                                    ["@get", "bin"]
-                                ],
-                                "max": [
-                                    "@max",
-                                    ["@get", "values"],
-                                    ["@get", "bin"]
-                                ],
+                                "output": {"start": "bin"},
                                 "maxbins": ["@get", "maxBins", 10]
                             },
                             {

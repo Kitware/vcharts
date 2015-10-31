@@ -114,22 +114,6 @@ var templateFunctions = {
         return (a === b);
     },
 
-    min: function (args, options, scope) {
-        var array = transform(args[0], options, scope),
-            field = transform(args[1], options, scope);
-        return d3.min(array, function (d) {
-            return getNested(d, field);
-        });
-    },
-
-    max: function (args, options, scope) {
-        var array = transform(args[0], options, scope),
-            field = transform(args[1], options, scope);
-        return d3.max(array, function (d) {
-            return getNested(d, field);
-        });
-    },
-
     join: function (args, options, scope) {
         var i, join, arr, result = "";
         sep = transform(args[0], options, scope);
@@ -269,8 +253,11 @@ var merge = function (defaults, options) {
     var extended,
         prop,
         index;
-    if (options === undefined) {
+    if (options === undefined || options === null) {
         return defaults;
+    }
+    if (defaults === undefined || defaults === null) {
+        return options;
     }
     if (isObjectLiteral(defaults)) {
         extended = {};
