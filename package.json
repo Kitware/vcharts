@@ -9,7 +9,7 @@
   },
   "name": "vcharts",
   "description": "Reusable [Vega](http://vega.github.io/vega/) charts.",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "main": "src/index.js",
   "directories": {
     "example": "examples",
